@@ -20,7 +20,7 @@ This file draws the data for the application from the "data.cvs" file, located w
 
  - The "**element**". That is, the name of the spare part.
  - The "**dateChanged**". The date that the spare part was last changed. This has to be manually updated for the time being. Use the d/m/y format (e.g. 25/4/2015).
- - The "**dateInterval**". That is, the max time (in **months**) allowed by the manufacturer, for the specific spare part .
+ - The "**dateInterval**". That is, the max time (in **months**) allowed by the manufacturer, for the specific spare part.
  - The "**kmsChanged**". That is, the kilometres (or miles) of the vehicle when this spare part was changed. This has to be manually updated for the time being.
  - The "**kmsInterval**". That is, the max kilometers allowed by the manufacturer, for the specific spare part.
 
