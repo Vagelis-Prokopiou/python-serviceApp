@@ -57,6 +57,8 @@ def main():
                     (l[4]).lower(), l[0].lower()))
 
     file.close()
+    print('If no messages appeared, you rock!')
+    print('Otherwise, you better do some servicing man...')
 
 
 if __name__ == '__main__':
