@@ -56,6 +56,8 @@ def main():
                 'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                     (l[4]).lower(), l[0].lower()))
 
+    file.close()
+
 
 if __name__ == '__main__':
     main()
