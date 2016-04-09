@@ -2,7 +2,7 @@
 A Python application, to help you manage the periodic maintenance of your vehicle.
 
 ## Instructions
-The main application is the "service.py" file. You just have to run it in your terminal. Use Python 3.
+The main application is the "service.py" file. You just have to run it in your terminal. Use Python 3. If you are a Windows user, you can download Python from https://www.python.org/downloads. If you are a Linux user, I take for granted that you know how to use the program... :)
 
 When you run it, the program asks for the current mileage of your vehicle. You have to provide this value. Then, the program checks if you have exceeded the allowed time or the allowed kilometres for every spare part of your vehicle, and informs you accordingly.
 
