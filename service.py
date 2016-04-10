@@ -28,7 +28,40 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
     return False
 
 
+def update_data(choise):
+    sparePartsDict = {'1': 'Spark',
+                      '2': 'Oil',
+                      '3': 'Oil filter',
+                      '4': 'Air filter'}
+    file = open('data.csv', 'r')
+    # header = file.readline().strip().split(',')
+    # Iterate the lines.
+    for line in file:
+        l = line.strip().split(',')
+        if l[0] == sparePartsDict[choise]:
+            print(l[0], sparePartsDict[choise])
+
+
 def main():
+    while True:
+        dataUpdate = input('If you have made any servicing to your vehicle\n'
+                           'and you want to update the data, choose the right spare part\n'
+                           'according to the following table, otherwise, just press "Enter".\n'
+                           'For the "Spark" press 1.\n'
+                           'For the "Oil" press 2.\n'
+                           'For the "Oil filter" press 3.\n'
+                           'For the "Air filter" press 4.\n'
+                           'Enter your choice": ', )
+        if dataUpdate == '':
+            break
+        elif int(dataUpdate) > 4 or (int(dataUpdate) <= 0):
+            print('\nYour choice seems wrong. Please, try again.\n\n')
+        else:
+            userProvidedDate = input('Please, provide the date of the change (in the form of day/month/year): ')
+            userProvidedDate = input('Please, provide the kilometres of the change: ')
+            update_data(str(dataUpdate))
+            break
+
     # Create the global mileage of the vehicle variable.
     mileageCurrent = input('Please, provide the current mileage of the vehicle: ')
     mileageCurrent = int(str(mileageCurrent).replace('.', ''))
