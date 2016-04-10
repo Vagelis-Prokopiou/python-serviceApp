@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+# This program is distributed under the GPLv2 licence.
+
 # @Author: Vagelis Prokopiou
 # @Email: drz4007@gmail.com
 # @Date: 2016-04-08 23:07:57
