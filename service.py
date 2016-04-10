@@ -33,14 +33,24 @@ def update(choice, user_date, user_kms):
                       '2': 'Oil',
                       '3': 'Oil filter',
                       '4': 'Air filter'}
-    file = open('data.csv', 'r')
-    # header = file.readline().strip().split(',')
+    file = open('data.csv', 'r+')
     # Iterate the lines.
-    for line in file:
-        l = line.strip().split(',')
+    lines = [l for l in file]
+    for x in range(len(lines)):
+        print(lines[x])
+        l = lines[x].strip().split(',')
         if l[0] == sparePartsDict[choice]:
-            print(l[0], sparePartsDict[choice])
-            print(str(user_date), str(user_kms))
+            l[0] += l[0]
+            print(l[0])
+                # print(l[0], sparePartsDict[choice])
+                # print(str(user_date), str(user_kms))
+    #         See the csv module. https://docs.python.org/3/library/csv.html
+
+
+    file.writerows(lines)
+    #     See http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
+
+    file.close()
 
 
 def main():
