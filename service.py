@@ -28,7 +28,7 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
     return False
 
 
-def update_data(choise):
+def update(choice, user_date, user_kms):
     sparePartsDict = {'1': 'Spark',
                       '2': 'Oil',
                       '3': 'Oil filter',
@@ -38,13 +38,14 @@ def update_data(choise):
     # Iterate the lines.
     for line in file:
         l = line.strip().split(',')
-        if l[0] == sparePartsDict[choise]:
-            print(l[0], sparePartsDict[choise])
+        if l[0] == sparePartsDict[choice]:
+            print(l[0], sparePartsDict[choice])
+            print(str(user_date), str(user_kms))
 
 
 def main():
     while True:
-        dataUpdate = input('If you have made any servicing to your vehicle\n'
+        data_update = input('If you have made any servicing to your vehicle\n'
                            'and you want to update the data, choose the right spare part\n'
                            'according to the following table, otherwise, just press "Enter".\n'
                            'For the "Spark" press 1.\n'
@@ -52,14 +53,14 @@ def main():
                            'For the "Oil filter" press 3.\n'
                            'For the "Air filter" press 4.\n'
                            'Enter your choice": ', )
-        if dataUpdate == '':
+        if data_update == '':
             break
-        elif int(dataUpdate) > 4 or (int(dataUpdate) <= 0):
+        elif int(data_update) > 4 or (int(data_update) <= 0):
             print('\nYour choice seems wrong. Please, try again.\n\n')
         else:
-            userProvidedDate = input('Please, provide the date of the change (in the form of day/month/year): ')
-            userProvidedDate = input('Please, provide the kilometres of the change: ')
-            update_data(str(dataUpdate))
+            user_date = input('Please, provide the date of the change (in the form of day/month/year): ')
+            user_kms = input('Please, provide the kilometres of the change: ')
+            update(str(data_update), user_date, int(user_kms))
             break
 
     # Create the global mileage of the vehicle variable.
