@@ -7,6 +7,17 @@
 # @Date: 2016-04-08 23:07:57
 
 import time
+import datetime
+import re
+
+
+
+
+
+# This function turns the user dates to date objects.
+def convert_dates(user_date):
+
+    return False
 
 
 # This function checks the difference between dates.
@@ -54,6 +65,22 @@ def update(choice, user_date, user_kms):
 
 
 def main():
+    userDate = input('Please input date: ')
+    m = re.search("^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$", userDate)
+    print(m)
+
+    while m == None:
+        m = re.search("^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$", userDate)
+        print('The date you provided is not valid. Please try again.')
+        userDate = input('Please input date: ')
+
+
+
+
+
+
+
+
     while True:
         data_update = input('If you have made any servicing to your vehicle\n'
                            'and you want to update the data, choose the right spare part\n'
