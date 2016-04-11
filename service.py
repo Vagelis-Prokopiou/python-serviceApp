@@ -9,10 +9,10 @@
 import time
 import datetime
 import re
+import monthdelta as monthdelta
 
 
 # This function turns the user dates to date objects.
-import monthdelta as monthdelta
 
 
 def createDateObject(str_date):
@@ -23,19 +23,16 @@ def createDateObject(str_date):
 
 
 def createDeltaObject(date_diff):
-    # days = int(date_diff) * 30
-    # target = datetime.timedelta(days=days)
-    # print(monthdelta.(int(date_diff)))
-    # print(target)
-    # return target
-    # break
+    days = int(date_diff) * 30
+    target = datetime.timedelta(days=days)
+    return target
 
 
 # This function checks the difference between dates.
 def compare_dates(dateChanged, dateCurrent, dateInterval):
-    dateChanged = createDateObject(dateChanged)
-    dateInterval = createDeltaObject(dateInterval)
-    if (dateCurrent - dateChanged) >= dateInterval:
+    date = createDateObject(dateChanged)
+    interval = createDeltaObject(dateInterval)
+    if (dateCurrent - date) >= interval:
         return True
     return False
 
