@@ -12,16 +12,29 @@ import re
 
 
 # This function turns the user dates to date objects.
-# def convert_dates(user_date):
+import monthdelta as monthdelta
 
-#     return False
+
+def createDateObject(str_date):
+    day, month, year = str_date.split('/')
+    print(day, month, year)
+    date = datetime.date(int(year), int(month), int(day))
+    return date
+
+
+def createDeltaObject(date_diff):
+    # days = int(date_diff) * 30
+    # target = datetime.timedelta(days=days)
+    # print(monthdelta.(int(date_diff)))
+    # print(target)
+    # return target
+    # break
 
 
 # This function checks the difference between dates.
 def compare_dates(dateChanged, dateCurrent, dateInterval):
-    dateInterval = int(dateInterval) * (31 * 24 * 60 * 60)
-    dateTuple = (int(dateChanged[2]), int(dateChanged[1]), int(dateChanged[0]), 0, 0, 0, 0, 0, 0)
-    dateChanged = time.mktime(dateTuple)
+    dateChanged = createDateObject(dateChanged)
+    dateInterval = createDeltaObject(dateInterval)
     if (dateCurrent - dateChanged) >= dateInterval:
         return True
     return False
@@ -77,7 +90,7 @@ def main():
     today = datetime.date.today()
 
     while True:
-        data_update = input('If you have made any servicing to your vehicle\n'
+        data_update = input('\nIf you have made any servicing to your vehicle\n'
                             'and you want to update the data, choose the right spare part\n'
                             'according to the following table, otherwise, just press "Enter".\n'
                             'For the "Spark" press 1.\n'
@@ -112,11 +125,12 @@ def main():
     # Iterate the lines.
     for line in file:
         l = line.strip().split(',')
-        day, month, year = l[1].split('/')
-        dateElements = [day, month, year]
+        # day, month, year = l[1].split('/')
+        dateChanged = l[1]
+        dateInterval = l[2]
 
         # Check the time that has past.
-        if compare_dates(dateElements, today, l[2]):
+        if compare_dates(dateChanged, today, dateInterval):
             print(
                 'More than {0} months have past since you changed your {1}. You must change the {1} again now!'.format(
                     (l[2].lower()), l[0].lower()))
