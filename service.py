@@ -11,9 +11,6 @@ import datetime
 import re
 
 
-
-
-
 # This function turns the user dates to date objects.
 # def convert_dates(user_date):
 
@@ -53,9 +50,9 @@ def update(choice, user_date, user_kms):
         if l[0] == sparePartsDict[choice]:
             l[0] += l[0]
             print(l[0])
-                # print(l[0], sparePartsDict[choice])
-                # print(str(user_date), str(user_kms))
-    #         See the csv module. https://docs.python.org/3/library/csv.html
+            # print(l[0], sparePartsDict[choice])
+            # print(str(user_date), str(user_kms))
+    # See the csv module. https://docs.python.org/3/library/csv.html
 
 
     file.writerows(lines)
@@ -66,46 +63,47 @@ def update(choice, user_date, user_kms):
 
 def main():
     while True:
-        userDate = input('Please input date: ')
-        m = re.search("^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$", userDate)
+        # Create the global mileage of the vehicle variable.
+        current_kms = input('Please, provide the current mileage of the vehicle: ')
+        current_kms = str(current_kms).replace('.', '')
+        m = re.search("^\d+?$", current_kms)
         if m == None:
-            print('The date you provided is not valid. Please try again.')
-        else:
-            print(m)
+            print('What you typed doesn\'t seem valid. Please, try again.')
+        if m:
+            current_kms = int(current_kms)
             break
 
-
-
-
-
-
-
+    # Create the global date variable.
+    today = datetime.date.today()
 
     while True:
         data_update = input('If you have made any servicing to your vehicle\n'
-                           'and you want to update the data, choose the right spare part\n'
-                           'according to the following table, otherwise, just press "Enter".\n'
-                           'For the "Spark" press 1.\n'
-                           'For the "Oil" press 2.\n'
-                           'For the "Oil filter" press 3.\n'
-                           'For the "Air filter" press 4.\n'
-                           'Enter your choice": ', )
+                            'and you want to update the data, choose the right spare part\n'
+                            'according to the following table, otherwise, just press "Enter".\n'
+                            'For the "Spark" press 1.\n'
+                            'For the "Oil" press 2.\n'
+                            'For the "Oil filter" press 3.\n'
+                            'For the "Air filter" press 4.\n'
+                            'Enter your choice": ', )
         if data_update == '':
             break
         elif int(data_update) > 4 or (int(data_update) <= 0):
             print('\nYour choice seems wrong. Please, try again.\n\n')
         else:
-            user_date = input('Please, provide the date of the change (in the form of day/month/year): ')
-            user_kms = input('Please, provide the kilometres of the change: ')
-            update(str(data_update), user_date, int(user_kms))
-            break
-
-    # Create the global mileage of the vehicle variable.
-    mileageCurrent = input('Please, provide the current mileage of the vehicle: ')
-    mileageCurrent = int(str(mileageCurrent).replace('.', ''))
-
-    # Create the global date variable.
-    dateCurrent = time.time()
+            while True:
+                user_date = input('Please, provide the date of the change (in the form of day/month/year): ')
+                m = re.search(
+                    "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
+                    user_date)
+                if m == None:
+                    print('The date you provided is not valid. Please try again.')
+                else:
+                    while True:
+                        user_kms = input('Please, provide the kilometres of the change: ')
+                        if user_kms <= current_kms:
+                            break
+                            # update(str(data_update), user_date, int(user_kms))
+                break
 
     # Open the file to check the data.
     file = open('data.csv', 'r')
@@ -118,13 +116,13 @@ def main():
         dateElements = [day, month, year]
 
         # Check the time that has past.
-        if compare_dates(dateElements, dateCurrent, l[2]):
+        if compare_dates(dateElements, today, l[2]):
             print(
                 'More than {0} months have past since you changed your {1}. You must change the {1} again now!'.format(
                     (l[2].lower()), l[0].lower()))
 
         # Check how many kilometers have past since the last change.
-        if compare_mileage(mileageCurrent, l[3], l[4]):
+        if compare_mileage(current_kms, l[3], l[4]):
             print(
                 'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                     (l[4]).lower(), l[0].lower()))
