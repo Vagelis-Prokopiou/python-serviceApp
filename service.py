@@ -129,7 +129,8 @@ def main():
                 # Check if the date provided is within a logical time span from today.
                 if validate_date(user_date, today) == 1:
                     print(
-                        '\nThe date you provided lies ahead in the future. I cannot accept that, unless you are some king of prophet, or unless you own a time machine.\n')
+                        '\nThe date you provided lies ahead in the future.'
+                        '\nI cannot accept that, unless you are some king of prophet, or unless you own a time machine.\n')
                 elif validate_date(user_date, today) == -1:
                     print('\nThe date you provided seems too old. I just doesn\'t make sense...\n')
                 else:
