@@ -9,6 +9,7 @@
 import time
 import datetime
 import re
+import csv
 
 
 # This function validates the kms provided by the user.
@@ -55,25 +56,36 @@ def update(choice, user_date, user_kms):
     print('user_date', user_date)
     print('user_kms', user_kms)
 
-    # file = open('data.csv', 'r+')
+    r = csv.reader(open('data.csv'))
 
-    # # Iterate the lines.
-    # lines = [l for l in file]
-    # for x in range(len(lines)):
-    #     print(lines[x])
-    #     l = lines[x].strip().split(',')
-    #     if l[0] == sparePartsDict[choice]:
-    #         l[0] += l[0]
-    #         print(l[0])
-    #         # print(l[0], sparePartsDict[choice])
-    #         # print(str(user_date), str(user_kms))
-    # # See the csv module. https://docs.python.org/3/library/csv.html
+    # Iterate the lines.
+    lines = [l for l in r]
+    for x in range(len(lines)):
+        # print(lines[x])
+            if lines[x][0] == choice:
+                lines[x][1] = str(user_date)
+                lines[x][3] = str(user_kms)
+
+    # with open('data.csv', 'w', newline='') as csvfile:
+
+    #     # Iterate the lines.
+    #     lines = [l for l in file]
+    #     for x in range(len(lines)):
+    #         # print(lines[x])
+    #         l = lines[x].strip().split(',')
+    #         if l[0] == choice:
+    #             print(l[0])
+    #             l[1] = str(user_date)
+    #             l[3] = str(user_kms)
+    #             # print(l[0], sparePartsDict[choice])
+    #             # print(str(user_date), str(user_kms))
+    #     # See the csv module. https://docs.python.org/3/library/csv.html
 
 
-    # file.writerows(lines)
+    # csvfile.writerows(lines)
     # #     See http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
 
-    # file.close()
+    # csvfile.close()
 
 
 def main():
