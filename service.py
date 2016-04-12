@@ -9,7 +9,19 @@
 import datetime
 import re
 import csv
-import random
+
+
+# import random
+
+
+def validate_date(user_date, today):
+    day, month, year = user_date.strip().split('/')
+    date = datetime.date(int(year), int(month), int(day))
+    if (today > date) and ((today - date) > datetime.timedelta(days=547)):
+        return -1
+    if (today < date):
+        return 1
+    return 0
 
 
 # This function validates the kms provided by the user.
@@ -69,15 +81,14 @@ def update(choice, user_date, user_kms):
 def main():
     # Create the global date variable.
     today = datetime.date.today()
+    # Create a list to hold all service messages and display them in the end.
+    messages = []
 
     # The dictionary with all the spare parts.
     sparePartsDict = {'1': 'Spark',
                       '2': 'Oil',
                       '3': 'Oil filter',
                       '4': 'Air filter'}
-
-    # Create a list to hold all service messages and display them in the end.
-    messages = []
 
     # Create the global mileage of the vehicle variable.
     while True:
@@ -113,12 +124,19 @@ def main():
                 "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
                 user_date)
             if m == None:
-                print('The date you provided is not valid. Please try again.')
+                print('\nThe date you provided is not valid. Please try again.\n')
             else:
-                break
+                # Check if the date provided is within a logical time span from today.
+                if validate_date(user_date, today) == 1:
+                    print(
+                        '\nThe date you provided lies ahead in the future. I cannot accept that, unless you are some king of prophet, or unless you own a time machine.\n')
+                elif validate_date(user_date, today) == -1:
+                    print('\nThe date you provided seems too old. I just doesn\'t make sense...\n')
+                else:
+                    break
 
         while True:
-            user_kms = input('Please, provide the kilometers of the ' + sparePartsDict[
+            user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsDict[
                 data_update].lower() + ' change: ')
             if validate_kms(user_kms):
                 user_kms = int(user_kms)
@@ -141,7 +159,6 @@ def main():
     # Iterate the lines.
     for line in file:
         l = line.strip().split(',')
-        # day, month, year = l[1].split('/')
         dateChanged = l[1]
         dateInterval = l[2]
 
