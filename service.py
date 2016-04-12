@@ -67,6 +67,9 @@ def update(choice, user_date, user_kms):
 
 
 def main():
+    # Create the global date variable.
+    today = datetime.date.today()
+
     # The dictionary with all the spare parts.
     sparePartsDict = {'1': 'Spark',
                       '2': 'Oil',
@@ -76,8 +79,8 @@ def main():
     # Create a list to hold all service messages and display them in the end.
     messages = []
 
+    # Create the global mileage of the vehicle variable.
     while True:
-        # Create the global mileage of the vehicle variable.
         current_kms = input('Please, provide the current kilometers/miles of the vehicle: ')
         if validate_kms(current_kms):
             current_kms = int(current_kms)
@@ -85,9 +88,7 @@ def main():
         else:
             print('The value you provide is not right. Please, try again.\n')
 
-    # Create the global date variable.
-    today = datetime.date.today()
-
+    # Check if the user wants to update anything.
     while True:
         data_update = input('\nIf you have made any servicing to your vehicle\n'
                             'and you want to update the data, choose the right spare part\n'
@@ -104,33 +105,35 @@ def main():
         else:
             break
 
-    while True:
-        user_date = input('Please, provide the date of the ' + sparePartsDict[
-            data_update].lower() + ' change (e.g. 31/12/2015): ')
-        m = re.search(
-            "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
-            user_date)
-        if m == None:
-            print('The date you provided is not valid. Please try again.')
-        else:
-            while True:
-                user_kms = input('Please, provide the kilometers of the ' + sparePartsDict[
-                    data_update].lower() + ' change: ')
-                if validate_kms(user_kms):
-                    user_kms = int(user_kms)
-                    if user_kms <= current_kms:
-                        break
-                    else:
-                        print(
-                            '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
+    if data_update != '':
+        while True:
+            user_date = input('Please, provide the date of the ' + sparePartsDict[
+                data_update].lower() + ' change (e.g. 31/12/2015): ')
+            m = re.search(
+                "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
+                user_date)
+            if m == None:
+                print('The date you provided is not valid. Please try again.')
+            else:
+                break
+
+        while True:
+            user_kms = input('Please, provide the kilometers of the ' + sparePartsDict[
+                data_update].lower() + ' change: ')
+            if validate_kms(user_kms):
+                user_kms = int(user_kms)
+                if user_kms <= current_kms:
+                    break
                 else:
-                    print('\nThe value you provide is not right. Please, try again.\n')
-            break
+                    print(
+                        '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
+        # If all the above, update the data.
         update(sparePartsDict[data_update], user_date, user_kms)
-        break
+        # End of function.
 
 
+    # Start the checking procedure.
     # Open the file to check the data.
     file = open('data.csv', 'r')
     header = file.readline().strip().split(',')
