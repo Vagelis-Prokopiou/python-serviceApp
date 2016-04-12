@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3.5
 
 # This program is distributed under the GPLv2 licence.
 
@@ -9,7 +9,6 @@
 import time
 import datetime
 import re
-import monthdelta as monthdelta
 
 
 # This function turns the user dates to date objects.
@@ -24,8 +23,8 @@ def createDateObject(str_date):
 
 def createDeltaObject(date_diff):
     days = int(date_diff) * 30
-    target = datetime.timedelta(days=days)
-    return target
+    target_date = datetime.timedelta(days=days)
+    return target_date
 
 
 # This function checks the difference between dates.
@@ -52,6 +51,7 @@ def update(choice, user_date, user_kms):
                       '3': 'Oil filter',
                       '4': 'Air filter'}
     file = open('data.csv', 'r+')
+
     # Iterate the lines.
     lines = [l for l in file]
     for x in range(len(lines)):
@@ -72,10 +72,12 @@ def update(choice, user_date, user_kms):
 
 
 def main():
+    # Create a list to hold all service messages and display them in the end.
+    messages = []
+
     while True:
         # Create the global mileage of the vehicle variable.
         current_kms = input('Please, provide the current mileage of the vehicle: ')
-        current_kms = str(current_kms).replace('.', '')
         m = re.search("^\d+?$", current_kms)
         if m == None:
             print('What you typed doesn\'t seem valid. Please, try again.')
@@ -131,16 +133,25 @@ def main():
             print(
                 'More than {0} months have past since you changed your {1}. You must change the {1} again now!'.format(
                     (l[2].lower()), l[0].lower()))
+            messages.append(
+                'More than {0} months have past since you changed your {1}. You must change the {1} again now!'.format(
+                    (l[2].lower()), l[0].lower()))
 
         # Check how many kilometers have past since the last change.
         if compare_mileage(current_kms, l[3], l[4]):
             print(
                 'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                     (l[4]).lower(), l[0].lower()))
+            messages.append('You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
+                    (l[4]).lower(), l[0].lower()))
 
     file.close()
-    print('If no messages appeared, you rock!')
-    print('Otherwise, you better do some servicing man...')
+
+    if len(messages) == 0:
+        print('You rock! Everything looks good!')
+    else:
+        for x in range(len(messages)):
+            print(messages[x])
 
 
 if __name__ == '__main__':
