@@ -1,6 +1,6 @@
 #!/usr/bin/python3.5
 
-# This program is distributed under the GPLv2 licence.
+# This program is distributed under the GPLv2 license.
 
 # @Author: Vagelis Prokopiou
 # @Email: drz4007@gmail.com
@@ -12,11 +12,9 @@ import re
 
 
 # This function turns the user dates to date objects.
-
-
 def createDateObject(str_date):
     day, month, year = str_date.split('/')
-    print(day, month, year)
+    # print(day, month, year)
     date = datetime.date(int(year), int(month), int(day))
     return date
 
@@ -130,28 +128,22 @@ def main():
 
         # Check the time that has past.
         if compare_dates(dateChanged, today, dateInterval):
-            print(
-                'More than {0} months have past since you changed your {1}. You must change the {1} again now!'.format(
-                    (l[2].lower()), l[0].lower()))
             messages.append(
-                'More than {0} months have past since you changed your {1}. You must change the {1} again now!'.format(
+                'You have exceeded the allowed {0} months between {1} changes. You must change the {1} again now!'.format(
                     (l[2].lower()), l[0].lower()))
 
         # Check how many kilometers have past since the last change.
         if compare_mileage(current_kms, l[3], l[4]):
-            print(
-                'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
-                    (l[4]).lower(), l[0].lower()))
             messages.append('You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                     (l[4]).lower(), l[0].lower()))
 
     file.close()
 
     if len(messages) == 0:
-        print('You rock! Everything looks good!')
+        print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)' )
     else:
         for x in range(len(messages)):
-            print(messages[x])
+            print('\n' + messages[x])
 
 
 if __name__ == '__main__':
