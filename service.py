@@ -6,12 +6,6 @@
 # @Email: drz4007@gmail.com
 # @Date: 2016-04-08 23:07:57
 
-# To do:
-# 1. Auto build the spare parts dictionary.
-# 2. Check the dates provided by the user for the various service tasks (how close they are to the current date).
-# 4. Add multiple error messages.
-
-
 import datetime
 import re
 import csv
@@ -29,7 +23,6 @@ def validate_kms(kms):
 # This function turns the user dates to date objects.
 def createDateObject(str_date):
     day, month, year = str_date.split('/')
-    # print(day, month, year)
     date = datetime.date(int(year), int(month), int(day))
     return date
 
@@ -59,10 +52,6 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
 
 
 def update(choice, user_date, user_kms):
-    print('choice', choice)
-    print('user_date', user_date)
-    print('user_kms', user_kms)
-
     r = csv.reader(open('data.csv'))
 
     # Iterate the lines.
@@ -71,7 +60,6 @@ def update(choice, user_date, user_kms):
         if lines[x][0] == choice:
             lines[x][1] = str(user_date)
             lines[x][3] = str(user_kms)
-
             with open('data.csv', 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerows(lines)
