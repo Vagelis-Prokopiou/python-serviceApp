@@ -11,6 +11,13 @@ import datetime
 import re
 
 
+# This function validates the kms provided by the user.
+def validate_kms(kms):
+    m = re.search("^\d+?$", kms)
+    if m == None:
+        return False
+    return True
+
 # This function turns the user dates to date objects.
 def createDateObject(str_date):
     day, month, year = str_date.split('/')
@@ -44,44 +51,50 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
 
 
 def update(choice, user_date, user_kms):
+    print('choice', choice)
+    print('user_date', user_date)
+    print('user_kms', user_kms)
+
+    # file = open('data.csv', 'r+')
+
+    # # Iterate the lines.
+    # lines = [l for l in file]
+    # for x in range(len(lines)):
+    #     print(lines[x])
+    #     l = lines[x].strip().split(',')
+    #     if l[0] == sparePartsDict[choice]:
+    #         l[0] += l[0]
+    #         print(l[0])
+    #         # print(l[0], sparePartsDict[choice])
+    #         # print(str(user_date), str(user_kms))
+    # # See the csv module. https://docs.python.org/3/library/csv.html
+
+
+    # file.writerows(lines)
+    # #     See http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
+
+    # file.close()
+
+
+def main():
+    # The dictionary with all the spare parts.
     sparePartsDict = {'1': 'Spark',
                       '2': 'Oil',
                       '3': 'Oil filter',
                       '4': 'Air filter'}
-    file = open('data.csv', 'r+')
 
-    # Iterate the lines.
-    lines = [l for l in file]
-    for x in range(len(lines)):
-        print(lines[x])
-        l = lines[x].strip().split(',')
-        if l[0] == sparePartsDict[choice]:
-            l[0] += l[0]
-            print(l[0])
-            # print(l[0], sparePartsDict[choice])
-            # print(str(user_date), str(user_kms))
-    # See the csv module. https://docs.python.org/3/library/csv.html
-
-
-    file.writerows(lines)
-    #     See http://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
-
-    file.close()
-
-
-def main():
     # Create a list to hold all service messages and display them in the end.
     messages = []
 
     while True:
         # Create the global mileage of the vehicle variable.
         current_kms = input('Please, provide the current mileage of the vehicle: ')
-        m = re.search("^\d+?$", current_kms)
-        if m == None:
-            print('What you typed doesn\'t seem valid. Please, try again.')
-        if m:
+        if validate_kms(current_kms):
             current_kms = int(current_kms)
             break
+        else:
+            print('The value you provide is not right. Please, try again.\n')
+
 
     # Create the global date variable.
     today = datetime.date.today()
@@ -101,7 +114,7 @@ def main():
             print('\nYour choice seems wrong. Please, try again.\n\n')
         else:
             while True:
-                user_date = input('Please, provide the date of the change (in the form of day/month/year): ')
+                user_date = input('Please, provide the date of the ' + sparePartsDict[data_update].lower() + ' change (in the form of day/month/year): ')
                 m = re.search(
                     "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
                     user_date)
@@ -109,11 +122,23 @@ def main():
                     print('The date you provided is not valid. Please try again.')
                 else:
                     while True:
-                        user_kms = input('Please, provide the kilometres of the change: ')
-                        if user_kms <= current_kms:
-                            break
-                            # update(str(data_update), user_date, int(user_kms))
-                break
+                        user_kms = input('Please, provide the kilometers of the change: ')
+                        if validate_kms(user_kms):
+                            user_kms = int(user_kms)
+                            if user_kms <= current_kms:
+                                break
+                            else:
+                                print('\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
+                        else:
+                            print('\nThe value you provide is not right. Please, try again.\n')
+                    break
+
+        update(sparePartsDict[data_update], user_date, user_kms)
+        break
+
+
+
+                # break
 
     # Open the file to check the data.
     file = open('data.csv', 'r')
