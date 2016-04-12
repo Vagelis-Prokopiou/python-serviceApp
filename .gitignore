@@ -65,4 +65,4 @@ target/
 .idea
 
 # The data.cvs file
-data.cvs
+data.csv
