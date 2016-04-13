@@ -79,6 +79,25 @@ def update(choice, user_date, user_kms):
 
 
 def main():
+    sparePartsList = []
+
+    # Autobuild the sparepart list.
+    # Open the file to check the data.
+    file = open('data.csv', 'r')
+
+    # Iterate the lines.
+    for line in file:
+        l = line.strip().split(',')
+        if l[0] != 'element'.lower():
+            sparePartsList.append(l)
+
+    file.close()
+
+    print(sparePartsList[0][0])
+
+
+
+
     # Create the global date variable.
     today = datetime.date.today()
     # Create a list to hold all service messages and display them in the end.
