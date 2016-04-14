@@ -116,11 +116,36 @@ def main():
             'Press "2" to insert a new data entry.\n'
             'Press "3" to see the existing data entries.\n'
             )
-        userChoise = input('Please, provide your choice: ')
+        userChoise = input('Waiting for your choice: ')
 
         # Do something with the userChoise
         if userChoise == '':
             print('Run inspection.')
+            # sparePartsList[0][0]
+            # Start the checking procedure.
+
+
+            # Iterate the lines.
+            for x in range(len(sparePartsList)):
+                print(sparePartsList[x])
+
+
+                # dateChanged = l[1]
+                # dateInterval = l[2]
+
+                # Check the time that has past.
+                if compare_dates(dateChanged, today, dateInterval):
+                    messages.append(
+                        'You have exceeded the allowed {0} months between {1} changes. You must change the {1} again now!'.format(
+                            (l[2].lower()), l[0].lower()))
+
+                # Check how many kilometers have past since the last change.
+                if compare_mileage(current_kms, l[3], l[4]):
+                    messages.append(
+                        'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
+                            (l[4]).lower(), l[0].lower()))
+
+            file.close()
             break
         elif userChoise == int(1):
             print('Update an existing data entry.')
@@ -199,30 +224,7 @@ def main():
         # End of function.
 
 
-    # Start the checking procedure.
-    # Open the file to check the data.
-    file = open('data.csv', 'r')
-    header = file.readline().strip().split(',')
 
-    # Iterate the lines.
-    for line in file:
-        l = line.strip().split(',')
-        dateChanged = l[1]
-        dateInterval = l[2]
-
-        # Check the time that has past.
-        if compare_dates(dateChanged, today, dateInterval):
-            messages.append(
-                'You have exceeded the allowed {0} months between {1} changes. You must change the {1} again now!'.format(
-                    (l[2].lower()), l[0].lower()))
-
-        # Check how many kilometers have past since the last change.
-        if compare_mileage(current_kms, l[3], l[4]):
-            messages.append(
-                'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
-                    (l[4]).lower(), l[0].lower()))
-
-    file.close()
 
     if len(messages) == 0:
         print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
