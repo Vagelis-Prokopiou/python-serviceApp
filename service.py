@@ -79,9 +79,10 @@ def update(choice, user_date, user_kms):
 
 
 def main():
+    # Autobuild the sparepart list.
+    # Create the list to hold the values.
     sparePartsList = []
 
-    # Autobuild the sparepart list.
     # Open the file to check the data.
     file = open('data.csv', 'r')
 
@@ -92,16 +93,23 @@ def main():
             sparePartsList.append(l)
 
     file.close()
-
     print(sparePartsList[0][0])
-
-
 
 
     # Create the global date variable.
     today = datetime.date.today()
+
     # Create a list to hold all service messages and display them in the end.
     messages = []
+
+    # Start ineracting with the user. Ask what he wants.
+    while True:
+        print('What would you like to do?\n'
+            'Press "Enter" to run an inspection.\n'
+            'Press "1" to update an existing data entry.\n'
+            'Press "2" to insert a new data entry.\n'
+            )
+        input('Please, provide your choice: ')
 
     # The dictionary with all the spare parts.
     sparePartsDict = {'1': 'Spark',
