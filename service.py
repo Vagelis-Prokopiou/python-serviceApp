@@ -102,20 +102,40 @@ def main():
     # Create a list to hold all service messages and display them in the end.
     messages = []
 
-    # Start ineracting with the user. Ask what he wants.
-    while True:
-        print('What would you like to do?\n'
-            'Press "Enter" to run an inspection.\n'
-            'Press "1" to update an existing data entry.\n'
-            'Press "2" to insert a new data entry.\n'
-            )
-        input('Please, provide your choice: ')
-
     # The dictionary with all the spare parts.
     sparePartsDict = {'1': 'Spark',
                       '2': 'Oil',
                       '3': 'Oil filter',
                       '4': 'Air filter'}
+
+    # Start interacting with the user. Ask what he wants.
+    while True:
+        print('What would you like to do?\n'
+            'Press "Enter" to run an inspection.\n'
+            'Press "1" to update an existing data entry.\n'
+            'Press "2" to insert a new data entry.\n'
+            'Press "3" to see the existing data entries.\n'
+            )
+        userChoise = input('Please, provide your choice: ')
+
+        # Do something with the userChoise
+        if userChoise == '':
+            print('Run inspection.')
+            break
+        elif userChoise == int(1):
+            print('Update an existing data entry.')
+            break
+        elif userChoise == int(2):
+            print('Insert a new data entry.')
+            break
+        elif userChoise == int(3):
+            print('See the existing data entries.')
+            break
+        else:
+            print('\nYour choice is wrong. Try again.\n')
+
+
+
 
     # Create the global mileage of the vehicle variable.
     while True:
