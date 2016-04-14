@@ -134,13 +134,13 @@ def main():
             while True:
                 print('\n')
                 for x in range(len(sparePartsList)):
-                    print('For ' + str(sparePartsList[x][0]) + ' press ' + str(x+1) + '.')
+                    print('For {} press {}.'.format(sparePartsList[x][0], x+1))
                 data_update = input('\nChoose the spare part: ')
                 print(data_update)
 
 
 
-                if (int(data_update) > len(sparePartsList)) or (int(data_update) <= 0):
+                if (int(data_update-1) > len(sparePartsList)) or (int(data_update) <= 0):
                     print('\nYour choice seems wrong. Please, try again.\n\n')
                 else:
                     break
