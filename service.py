@@ -65,10 +65,6 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
 
 # This function updates the "data.csv" file.
 def update(choice, user_date, user_kms, sparePartsList):
-    # r = csv.reader(open('data.csv'))
-
-    # Iterate the lines.
-    # lines = [l for l in r]
     for x in range(len(sparePartsList)):
         if sparePartsList[x][0] == choice:
             sparePartsList[x][1] = str(user_date)
@@ -76,6 +72,8 @@ def update(choice, user_date, user_kms, sparePartsList):
             with open('data.csv', 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerows(sparePartsList)
+    print('\nThe data was updated successfully. Thank you.\n')
+
 
 def print_messages(messages):
   if len(messages) == 0:
@@ -90,6 +88,16 @@ def inform(sparePartsList):
       print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(sparePartsList[x][0], sparePartsList[x][1],sparePartsList[x][2],sparePartsList[x][4]))
 
 def main():
+    # A list with various, custom error messages.
+    error_messages = ['Your input is wrong. Please try again.',
+                      'Wrong again...',
+                      'Wrong again... Really?',
+                      'I am losing my patience man...',
+                      'Wrong again. Are you retarder man?',
+                      'Arggggg!!!!!!!!!',
+                      'What an @$$!!!'
+                      ]
+
     # Autobuild the sparepart list.
     # Create the list to hold the values.
     sparePartsList = []
@@ -100,9 +108,7 @@ def main():
     # Iterate the lines.
     for line in file:
         l = line.strip().split(',')
-        # if l[0] != 'element'.lower():
         sparePartsList.append(l)
-
     file.close()
 
     # Create the global date variable.
