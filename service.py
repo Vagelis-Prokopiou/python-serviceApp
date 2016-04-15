@@ -12,6 +12,7 @@ import random
 import re
 
 
+# Checks the diff in comparison with today.
 def validate_date(user_date, today):
     day, month, year = user_date.strip().split('/')
     date = datetime.date(int(year), int(month), int(day))
@@ -22,7 +23,7 @@ def validate_date(user_date, today):
     return 0
 
 
-# This function validates the kms provided by the user.
+# Validates the kms provided by the user.
 def validate_kms(kms):
     m = re.search("^\d+?$", kms)
     if m == None:
@@ -30,20 +31,21 @@ def validate_kms(kms):
     return True
 
 
-# This function turns the user dates to date objects.
+# Turns the user dates to date objects.
 def createDateObject(str_date):
     day, month, year = str_date.split('/')
     date = datetime.date(int(year), int(month), int(day))
     return date
 
 
+# Creates a datetime delta object.
 def createDeltaObject(date_diff):
     days = int(date_diff) * 30
     target_date = datetime.timedelta(days=days)
     return target_date
 
 
-# This function checks the difference between dates.
+# Checks the difference between dates.
 def compare_dates(dateChanged, dateCurrent, dateInterval):
     date = createDateObject(dateChanged)
     interval = createDeltaObject(dateInterval)
@@ -52,7 +54,7 @@ def compare_dates(dateChanged, dateCurrent, dateInterval):
     return False
 
 
-# This functions checks the difference between dates.
+# Checks the difference between kilometers.
 def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
     kmsChanghed = int(kmsChanghed)
     kmsInterval = int(kmsInterval)
@@ -61,7 +63,7 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
     return False
 
 
-# This function updates the "data.csv" file.
+# Updates the "data.csv" file.
 def update(choice, user_date, user_kms, sparePartsList):
     for x in range(len(sparePartsList)):
         if sparePartsList[x][0] == choice:
@@ -72,7 +74,7 @@ def update(choice, user_date, user_kms, sparePartsList):
                 writer.writerows(sparePartsList)
     print('\nThe data was updated successfully. Thank you.\n')
 
-
+# Prints the messages produced by the inspection.
 def print_messages(messages):
     if len(messages) == 0:
         print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
@@ -80,16 +82,15 @@ def print_messages(messages):
         for x in range(len(messages)):
             print('\n' + messages[x])
 
-
+# Informs the user for the currently available data entries in the "data.csv" file.
 def inform(sparePartsList):
     print('Currently, the available data entries are the following:\n')
     for x in range(len(sparePartsList)):
         print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(
             sparePartsList[x][0], sparePartsList[x][1], sparePartsList[x][2], sparePartsList[x][4]))
 
-
+# Prints the various error messages.
 def print_error_messages(error_messages, error_messages_advanced, tries):
-    # print('tries = ', tries)
     if tries < len(error_messages):
         return error_messages[tries]
     return error_messages_advanced[random.randint(0, (len(error_messages_advanced) - 1))]
@@ -113,7 +114,6 @@ def main():
                                ]
 
     # Autobuild the sparepart list.
-    # Create the list to hold the values.
     sparePartsList = []
 
     # Open the file to check the data.
@@ -152,7 +152,7 @@ def main():
                 kmsChanghed = sparePartsList[x][3]
                 kmsInterval = sparePartsList[x][4]
 
-                # Check the time that has past.
+                # Check the time that has past since the last change.
                 if compare_dates(dateChanged, today, dateInterval):
                     messages.append(
                         'You have exceeded the allowed {0} months between {1} changes. You must change the {1} again now!'.format(
@@ -197,7 +197,6 @@ def main():
                         print('\nThe date you provided seems too old. I just doesn\'t make sense...\n')
                     else:
                         break
-
             while True:
                 current_kms = input('\nPlease, provide the current kilometers of the vehicle: ')
                 if validate_kms(current_kms):
