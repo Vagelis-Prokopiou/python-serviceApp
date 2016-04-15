@@ -9,9 +9,7 @@
 import csv
 import datetime
 import re
-
-
-# import random
+import random
 
 
 def validate_date(user_date, today):
@@ -82,10 +80,25 @@ def print_messages(messages):
       for x in range(len(messages)):
           print('\n' + messages[x])
 
+
+
+
+
+
+
 def inform(sparePartsList):
   print('Currently, the available data entries are the following:\n')
   for x in range(len(sparePartsList)):
       print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(sparePartsList[x][0], sparePartsList[x][1],sparePartsList[x][2],sparePartsList[x][4]))
+
+
+
+def print_error_messages(error_messages, error_messages_advanced, tries):
+  if tries < len(error_messages):
+    return error_messages[tries]
+  return error_messages_advanced[random.randint(0, len(error_messages_advanced))]
+
+
 
 def main():
     # A list with various, custom error messages.
@@ -93,10 +106,16 @@ def main():
                       'Wrong again...',
                       'Wrong again... Really?',
                       'I am losing my patience man...',
-                      'Wrong again. Are you retarder man?',
-                      'Arggggg!!!!!!!!!',
-                      'What an @$$!!!'
+                      'Wrong again. Are you retarder man?'
+                      'This is insane!!!',
+                      'Are you stupid man?',
                       ]
+
+    error_messages_advanced = ['Arggggg!!!!!!!!!',
+                              'What an @$$!!!',
+                              'Are you sure that you are mentally ok man? Maybe you should check it out...',
+                              'That\'s it. It is official. You should be starring in "One Flew Over the Cuckoo\'s Nest".',
+                              ]
 
     # Autobuild the sparepart list.
     # Create the list to hold the values.
@@ -154,13 +173,16 @@ def main():
 
         elif validate_kms(user_choice) and int(user_choice) == 1:
             while True:
+                tries = 0
                 print('\n')
                 for x in range(1, (len(sparePartsList))):
                     print('For {}, press {}.'.format(sparePartsList[x][0], x))
                 data_update = input('\nChoose the spare part: ')
 
                 if ((int(data_update)) > len(sparePartsList)) or (int(data_update) <= 0):
-                    print('\nYour choice seems wrong. Please, try again.\n\n')
+                    # print('\nYour choice seems wrong. Please, try again.\n\n')
+                    tries += 1
+                    print(print_error_messages(error_messages, error_messages_advanced, tries))
                 else:
                     break
             while True:
