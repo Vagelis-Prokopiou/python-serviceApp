@@ -94,7 +94,7 @@ def inform(sparePartsList):
 
 
 def print_error_messages(error_messages, error_messages_advanced, tries):
-  print('tries = ', tries)
+  # print('tries = ', tries)
   if tries < len(error_messages):
     return error_messages[tries]
   return error_messages_advanced[random.randint(0, (len(error_messages_advanced)-1))]
@@ -114,8 +114,8 @@ def main():
 
     error_messages_advanced = ['Arggggg!!!!!!!!!',
                               'What an @$$!!!',
-                              'Are you sure that you are mentally ok man? Maybe you should check it out...',
-                              'That\'s it. It is official. You should be starring in "One Flew Over the Cuckoo\'s Nest".',
+                              'Are you sure that you are mentally ok man?\nMaybe you should check it out...',
+                              'That\'s it. It is official.\nYou should be starring in "One Flew Over the Cuckoo\'s Nest".',
                               ]
 
     # Autobuild the sparepart list.
@@ -144,6 +144,7 @@ def main():
           'Press "3" to see the existing data entries.\n'
           )
     while True:
+        tries=0
         user_choice = input('Waiting for your choice: ')
         # Do something with the user_choice
         if validate_kms(user_choice) and (int(user_choice) > 3):
@@ -181,7 +182,6 @@ def main():
                 data_update = input('\nChoose the spare part: ')
 
                 if ((int(data_update)) > len(sparePartsList)) or (int(data_update) <= 0):
-                    # print('\nYour choice seems wrong. Please, try again.\n\n')
                     print('\n')
                     print(print_error_messages(error_messages, error_messages_advanced, tries))
                     tries += 1
@@ -236,7 +236,9 @@ def main():
           inform(sparePartsList)
           break
         else:
-            print('\nYour choice is wrong. Try again.\n')
+            print('\n')
+            print(print_error_messages(error_messages, error_messages_advanced, tries))
+            tries += 1
 
 
 
