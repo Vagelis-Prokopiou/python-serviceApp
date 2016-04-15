@@ -130,11 +130,13 @@ def main():
                         'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                             (sparePartsList[x][4]).lower(), sparePartsList[x][0].lower()))
 
-        elif int(user_choice) == 1:
+            break
+
+        elif validate_kms(user_choice) and int(user_choice) == 1:
             while True:
                 print('\n')
                 for x in range(len(sparePartsList)):
-                    print('For {} press {}.'.format(sparePartsList[x][0], x+1))
+                    print('For {}, press {}.'.format(sparePartsList[x][0], x+1))
                 data_update = input('\nChoose the spare part: ')
                 print(data_update)
 
@@ -177,11 +179,11 @@ def main():
             # If all the above, update the data.
             update(sparePartsDict[data_update], user_date, user_kms)
             break
-        elif int(user_choice) == 2:
+        elif validate_kms(user_choice) and int(user_choice) == 2:
             print('user_choice == int(2)')
             # Do stuff and then
             break
-        elif int(user_choice) == 3:
+        elif validate_kms(user_choice) and int(user_choice) == 3:
             print('user_choice == int(3)')
             # Do stuff and then
             break
