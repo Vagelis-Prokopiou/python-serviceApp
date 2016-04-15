@@ -84,6 +84,11 @@ def print_messages(messages):
       for x in range(len(messages)):
           print('\n' + messages[x])
 
+def inform(sparePartsList):
+  print('Currently, the available data entries are the following:\n')
+  for x in range(len(sparePartsList)):
+      print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(sparePartsList[x][0], sparePartsList[x][1],sparePartsList[x][2],sparePartsList[x][4]))
+
 def main():
     # Autobuild the sparepart list.
     # Create the list to hold the values.
@@ -190,16 +195,15 @@ def main():
 
             # If all the above, update the data.
             update(sparePartsList[int(data_update)-1][0], user_date, user_kms)
+            inform(sparePartsList)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
             print('user_choice == int(2)')
             # Do stuff and then
             break
         elif validate_kms(user_choice) and int(user_choice) == 3:
-            print('Currently, the available data entries are the following:\n')
-            for x in range(len(sparePartsList)):
-                    print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(sparePartsList[x][0], sparePartsList[x][1],sparePartsList[x][2],sparePartsList[x][4]))
-            break
+          inform(sparePartsList)
+          break
         else:
             print('\nYour choice is wrong. Try again.\n')
 
