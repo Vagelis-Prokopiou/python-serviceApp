@@ -8,8 +8,8 @@
 
 import csv
 import datetime
-import re
 import random
+import re
 
 
 def validate_date(user_date, today):
@@ -74,31 +74,25 @@ def update(choice, user_date, user_kms, sparePartsList):
 
 
 def print_messages(messages):
-  if len(messages) == 0:
+    if len(messages) == 0:
         print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
-  else:
-      for x in range(len(messages)):
-          print('\n' + messages[x])
-
-
-
-
-
+    else:
+        for x in range(len(messages)):
+            print('\n' + messages[x])
 
 
 def inform(sparePartsList):
-  print('Currently, the available data entries are the following:\n')
-  for x in range(len(sparePartsList)):
-      print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(sparePartsList[x][0], sparePartsList[x][1],sparePartsList[x][2],sparePartsList[x][4]))
-
+    print('Currently, the available data entries are the following:\n')
+    for x in range(len(sparePartsList)):
+        print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(
+            sparePartsList[x][0], sparePartsList[x][1], sparePartsList[x][2], sparePartsList[x][4]))
 
 
 def print_error_messages(error_messages, error_messages_advanced, tries):
-  # print('tries = ', tries)
-  if tries < len(error_messages):
-    return error_messages[tries]
-  return error_messages_advanced[random.randint(0, (len(error_messages_advanced)-1))]
-
+    # print('tries = ', tries)
+    if tries < len(error_messages):
+        return error_messages[tries]
+    return error_messages_advanced[random.randint(0, (len(error_messages_advanced) - 1))]
 
 
 def main():
@@ -106,17 +100,17 @@ def main():
     error_messages = ['Your input is wrong. Please try again.',
                       'Wrong again...',
                       'Wrong again... Really?',
-                      'I am losing my patience man...',
-                      'Wrong again. Are you retarder man?',
+                      'I am losing my patience...',
+                      'Wrong again. Are you retarded man?',
                       'This is insane!!!',
-                      'Are you stupid man?',
+                      'Are you kidding me?',
                       ]
 
     error_messages_advanced = ['Arggggg!!!!!!!!!',
-                              'What an @$$!!!',
-                              'Are you sure that you are mentally ok man?\nMaybe you should check it out...',
-                              'That\'s it. It is official.\nYou should be starring in "One Flew Over the Cuckoo\'s Nest".',
-                              ]
+                               'What an @$$!!!',
+                               'Are you sure that you are mentally ok man?\nMaybe you should check it out...',
+                               'It is official.\nYou should be starring in "One Flew Over the Cuckoo\'s Nest".',
+                               ]
 
     # Autobuild the sparepart list.
     # Create the list to hold the values.
@@ -143,9 +137,9 @@ def main():
           'Press "2" to insert a new data entry.\n'
           'Press "3" to see the existing data entries.\n'
           )
+    tries = 0
     while True:
-        tries=0
-        user_choice = input('Waiting for your choice: ')
+        user_choice = input('\nWaiting for your choice: ')
         # Do something with the user_choice
         if validate_kms(user_choice) and (int(user_choice) > 3):
             user_choice = int(user_choice)
@@ -170,9 +164,7 @@ def main():
                         'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                             (sparePartsList[x][4]).lower(), sparePartsList[x][0].lower()))
             print_messages(messages)
-
             break
-
         elif validate_kms(user_choice) and int(user_choice) == 1:
             tries = 0
             while True:
@@ -207,22 +199,22 @@ def main():
                         break
 
             while True:
-              current_kms = input('\nPlease, provide the current kilometers of the vehicle: ')
-              if validate_kms(current_kms):
-                  current_kms = int(current_kms)
-                  break
-              print('\nYour choice seems wrong. Please, try again.')
+                current_kms = input('\nPlease, provide the current kilometers of the vehicle: ')
+                if validate_kms(current_kms):
+                    current_kms = int(current_kms)
+                    break
+                print('\nYour choice seems wrong. Please, try again.')
 
             while True:
-              user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsList[
-                  (int(data_update))][0].lower() + ' change: ')
-              if validate_kms(user_kms):
-                  user_kms = int(user_kms)
-                  if user_kms <= current_kms:
-                      break
-                  else:
-                      print(
-                          '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
+                user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsList[
+                    (int(data_update))][0].lower() + ' change: ')
+                if validate_kms(user_kms):
+                    user_kms = int(user_kms)
+                    if user_kms <= current_kms:
+                        break
+                    else:
+                        print(
+                            '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
             # If all the above, update the data.
             update(sparePartsList[int(data_update)][0], user_date, user_kms, sparePartsList)
@@ -233,14 +225,12 @@ def main():
             # Do stuff and then
             break
         elif validate_kms(user_choice) and int(user_choice) == 3:
-          inform(sparePartsList)
-          break
+            inform(sparePartsList)
+            break
         else:
             print('\n')
             print(print_error_messages(error_messages, error_messages_advanced, tries))
             tries += 1
-
-
 
 
 if __name__ == '__main__':
