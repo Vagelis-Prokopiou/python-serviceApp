@@ -123,6 +123,8 @@ def main():
             for x in range(len(sparePartsList)):
                 dateChanged = sparePartsList[x][1]
                 dateInterval = sparePartsList[x][2]
+                kmsChanghed = sparePartsList[x][3]
+                kmsInterval = sparePartsList[x][4]
 
                 # Check the time that has past.
                 if compare_dates(dateChanged, today, dateInterval):
@@ -131,7 +133,7 @@ def main():
                             (sparePartsList[x][2].lower()), sparePartsList[x][0].lower()))
 
                 # Check how many kilometers have past since the last change.
-                if compare_mileage(user_choice, sparePartsList[x][3], sparePartsList[x][4]):
+                if compare_mileage(user_choice, kmsChanghed, kmsInterval):
                     messages.append(
                         'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                             (sparePartsList[x][4]).lower(), sparePartsList[x][0].lower()))
@@ -152,7 +154,7 @@ def main():
                     break
             while True:
                 user_date = input('Please, provide the date of the ' + sparePartsList[
-                    data_update].lower() + ' change (e.g. 31/12/2015): ')
+                    (int(data_update)-1)][0].lower() + ' change (e.g. 31/12/2015): ')
                 m = re.search(
                     "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
                     user_date)
@@ -170,18 +172,24 @@ def main():
                         break
 
             while True:
-                user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsList[
-                    data_update].lower() + ' change: ')
-                if validate_kms(user_kms):
-                    user_kms = int(user_kms)
-                    if user_kms <= current_kms:
-                        break
-                    else:
-                        print(
-                            '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
+              current_kms = input('\nPlease, provide the current kilometers of the vehicle: ')
+              if validate_kms(current_kms):
+                  current_kms = int(current_kms)
+                  break
+
+            while True:
+              user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsList[
+                  (int(data_update)-1)][0].lower() + ' change: ')
+              if validate_kms(user_kms):
+                  user_kms = int(user_kms)
+                  if user_kms <= current_kms:
+                      break
+                  else:
+                      print(
+                          '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
             # If all the above, update the data.
-            update(sparePartsList[data_update], user_date, user_kms)
+            update(sparePartsList[int(data_update)-1][0], user_date, user_kms)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
             print('user_choice == int(2)')
