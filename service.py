@@ -77,6 +77,12 @@ def update(choice, user_date, user_kms):
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerows(lines)
 
+def print_messages(messages):
+  if len(messages) == 0:
+        print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
+  else:
+      for x in range(len(messages)):
+          print('\n' + messages[x])
 
 def main():
     # Autobuild the sparepart list.
@@ -129,6 +135,7 @@ def main():
                     messages.append(
                         'You have exceeded the allowed {0} kms between {1} changes. You must change the {1} again now!'.format(
                             (sparePartsList[x][4]).lower(), sparePartsList[x][0].lower()))
+            print_messages(messages)
 
             break
 
@@ -138,16 +145,13 @@ def main():
                 for x in range(len(sparePartsList)):
                     print('For {}, press {}.'.format(sparePartsList[x][0], x+1))
                 data_update = input('\nChoose the spare part: ')
-                print(data_update)
 
-
-
-                if (int(data_update-1) > len(sparePartsList)) or (int(data_update) <= 0):
+                if ((int(data_update)-1) > len(sparePartsList)) or (int(data_update) <= 0):
                     print('\nYour choice seems wrong. Please, try again.\n\n')
                 else:
                     break
             while True:
-                user_date = input('Please, provide the date of the ' + sparePartsDict[
+                user_date = input('Please, provide the date of the ' + sparePartsList[
                     data_update].lower() + ' change (e.g. 31/12/2015): ')
                 m = re.search(
                     "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
@@ -166,7 +170,7 @@ def main():
                         break
 
             while True:
-                user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsDict[
+                user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsList[
                     data_update].lower() + ' change: ')
                 if validate_kms(user_kms):
                     user_kms = int(user_kms)
@@ -177,24 +181,21 @@ def main():
                             '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
             # If all the above, update the data.
-            update(sparePartsDict[data_update], user_date, user_kms)
+            update(sparePartsList[data_update], user_date, user_kms)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
             print('user_choice == int(2)')
             # Do stuff and then
             break
         elif validate_kms(user_choice) and int(user_choice) == 3:
-            print('user_choice == int(3)')
-            # Do stuff and then
+            print('Currently, the available data entries are the following:\n')
+            for x in range(len(sparePartsList)):
+                    print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(sparePartsList[x][0], sparePartsList[x][1],sparePartsList[x][2],sparePartsList[x][4]))
             break
         else:
             print('\nYour choice is wrong. Try again.\n')
 
-    if len(messages) == 0:
-        print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
-    else:
-        for x in range(len(messages)):
-            print('\n' + messages[x])
+
 
 
 if __name__ == '__main__':
