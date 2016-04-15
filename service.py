@@ -64,18 +64,18 @@ def compare_mileage(mileageCurrent, kmsChanghed, kmsInterval):
 
 
 # This function updates the "data.csv" file.
-def update(choice, user_date, user_kms):
-    r = csv.reader(open('data.csv'))
+def update(choice, user_date, user_kms, sparePartsList):
+    # r = csv.reader(open('data.csv'))
 
     # Iterate the lines.
-    lines = [l for l in r]
-    for x in range(len(lines)):
-        if lines[x][0] == choice:
-            lines[x][1] = str(user_date)
-            lines[x][3] = str(user_kms)
+    # lines = [l for l in r]
+    for x in range(len(sparePartsList)):
+        if sparePartsList[x][0] == choice:
+            sparePartsList[x][1] = str(user_date)
+            sparePartsList[x][3] = str(user_kms)
             with open('data.csv', 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
-                writer.writerows(lines)
+                writer.writerows(sparePartsList)
 
 def print_messages(messages):
   if len(messages) == 0:
@@ -100,8 +100,8 @@ def main():
     # Iterate the lines.
     for line in file:
         l = line.strip().split(',')
-        if l[0] != 'element'.lower():
-            sparePartsList.append(l)
+        # if l[0] != 'element'.lower():
+        sparePartsList.append(l)
 
     file.close()
 
@@ -149,17 +149,17 @@ def main():
         elif validate_kms(user_choice) and int(user_choice) == 1:
             while True:
                 print('\n')
-                for x in range(len(sparePartsList)):
-                    print('For {}, press {}.'.format(sparePartsList[x][0], x+1))
+                for x in range(1, (len(sparePartsList))):
+                    print('For {}, press {}.'.format(sparePartsList[x][0], x))
                 data_update = input('\nChoose the spare part: ')
 
-                if ((int(data_update)-1) > len(sparePartsList)) or (int(data_update) <= 0):
+                if ((int(data_update)) > len(sparePartsList)) or (int(data_update) <= 0):
                     print('\nYour choice seems wrong. Please, try again.\n\n')
                 else:
                     break
             while True:
                 user_date = input('Please, provide the date of the ' + sparePartsList[
-                    (int(data_update)-1)][0].lower() + ' change (e.g. 31/12/2015): ')
+                    (int(data_update))][0].lower() + ' change (e.g. 31/12/2015): ')
                 m = re.search(
                     "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
                     user_date)
@@ -181,10 +181,11 @@ def main():
               if validate_kms(current_kms):
                   current_kms = int(current_kms)
                   break
+              print('\nYour choice seems wrong. Please, try again.')
 
             while True:
               user_kms = input('\nPlease, provide the kilometers of the ' + sparePartsList[
-                  (int(data_update)-1)][0].lower() + ' change: ')
+                  (int(data_update))][0].lower() + ' change: ')
               if validate_kms(user_kms):
                   user_kms = int(user_kms)
                   if user_kms <= current_kms:
@@ -194,8 +195,8 @@ def main():
                           '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
             # If all the above, update the data.
-            update(sparePartsList[int(data_update)-1][0], user_date, user_kms)
-            inform(sparePartsList)
+            update(sparePartsList[int(data_update)][0], user_date, user_kms, sparePartsList)
+            # inform(sparePartsList)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
             print('user_choice == int(2)')
