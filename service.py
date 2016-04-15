@@ -94,9 +94,10 @@ def inform(sparePartsList):
 
 
 def print_error_messages(error_messages, error_messages_advanced, tries):
+  print('tries = ', tries)
   if tries < len(error_messages):
     return error_messages[tries]
-  return error_messages_advanced[random.randint(0, len(error_messages_advanced))]
+  return error_messages_advanced[random.randint(0, (len(error_messages_advanced)-1))]
 
 
 
@@ -106,7 +107,7 @@ def main():
                       'Wrong again...',
                       'Wrong again... Really?',
                       'I am losing my patience man...',
-                      'Wrong again. Are you retarder man?'
+                      'Wrong again. Are you retarder man?',
                       'This is insane!!!',
                       'Are you stupid man?',
                       ]
@@ -172,8 +173,8 @@ def main():
             break
 
         elif validate_kms(user_choice) and int(user_choice) == 1:
+            tries = 0
             while True:
-                tries = 0
                 print('\n')
                 for x in range(1, (len(sparePartsList))):
                     print('For {}, press {}.'.format(sparePartsList[x][0], x))
@@ -181,8 +182,9 @@ def main():
 
                 if ((int(data_update)) > len(sparePartsList)) or (int(data_update) <= 0):
                     # print('\nYour choice seems wrong. Please, try again.\n\n')
-                    tries += 1
+                    print('\n')
                     print(print_error_messages(error_messages, error_messages_advanced, tries))
+                    tries += 1
                 else:
                     break
             while True:
