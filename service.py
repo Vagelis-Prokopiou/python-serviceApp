@@ -63,15 +63,26 @@ def compare_kms(kms_current, kms_changed, kms_interval):
     return False
 
 
-# Updates the "data.csv" file.
-def update_data_file(choice, user_date, user_kms, spare_parts_list):
+# Updates an existing entry.
+def update_entry(choice, user_date, user_kms, spare_parts_list):
     for x in range(len(spare_parts_list)):
         if spare_parts_list[x][0] == choice:
             spare_parts_list[x][1] = str(user_date)
             spare_parts_list[x][3] = str(user_kms)
-            with open('data.csv', 'w', newline='') as csvfile:
-                writer = csv.writer(csvfile, delimiter=',')
-                writer.writerows(spare_parts_list)
+            write_data(spare_parts_list)
+
+
+# Adds a new entry.
+def add_entry(row, spare_parts_list):
+    spare_parts_list.append(row)
+    write_data(spare_parts_list)
+
+
+# Writes to the "data.csv" file.
+def write_data(spare_parts_list):
+    with open('data.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+        writer.writerows(spare_parts_list)
     print('\nThe data was updated successfully. Thank you.\n')
 
 
@@ -136,7 +147,7 @@ def main():
 
     print('\nWhat would you like to do?\n\n'
           'Provide the current mileage of the vehicle, to run an inspection.\n'
-          'Press "1" to update_data_file an existing data entry.\n'
+          'Press "1" to update_entry an existing data entry.\n'
           'Press "2" to insert a new data entry.\n'
           'Press "3" to see the existing data entries.\n'
           )
@@ -152,7 +163,7 @@ def main():
             for x in range(1, len(spare_parts_list)):
                 date_changed = spare_parts_list[x][1]
                 date_interval = spare_parts_list[x][2]
-                kms_changhed = spare_parts_list[x][3]
+                kms_changed = spare_parts_list[x][3]
                 kms_interval = spare_parts_list[x][4]
 
                 # Check the time that has past since the last change.
@@ -163,7 +174,7 @@ def main():
                             (spare_parts_list[x][2].lower()), spare_parts_list[x][0].lower()))
 
                 # Check how many kilometers have past since the last change.
-                if compare_kms(user_choice, kms_changhed, kms_interval):
+                if compare_kms(user_choice, kms_changed, kms_interval):
                     messages.append(
                         'You have exceeded the allowed {0} kms between {1} changes. '
                         'You must change the {1} again now!'.format(
@@ -220,13 +231,19 @@ def main():
                         print(
                             '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
-            # If all the above, update_data_file the data.
-            update_data_file(spare_parts_list[int(data_update)][0], user_date, user_kms, spare_parts_list)
+            # If all the above, update_entry the data.
+            update_entry(spare_parts_list[int(data_update)][0], user_date, user_kms, spare_parts_list)
             # inform(spare_parts_list)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
-            print('user_choice == int(2)')
-            # Do stuff and then
+            element = input('Please provide the name of the spare part: ')
+            date_changed = input('Please provide the date of the last change: ')
+            date_interval = input('Please provide the max number of months allowed for the spare part: ')
+            kms_changed = input('Please provide the kms of the last change: ')
+            kms_interval = input('Please provide the max kilometers allowed for the spare part: ')
+            row = [element, date_changed, date_interval, kms_changed, kms_interval]
+            spare_parts_list.append(row)
+            add_entry(row, spare_parts_list)
             break
         elif validate_kms(user_choice) and int(user_choice) == 3:
             inform(spare_parts_list)

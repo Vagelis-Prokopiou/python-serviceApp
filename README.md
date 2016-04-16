@@ -12,7 +12,7 @@ Use Python 3. If you are a Windows user, you can download Python from https://ww
 
 When you run it, the program asks for the current mileage of your vehicle. You have to provide this value.
 
-Then, the program asks if you made any servicing, and you want to update_data_file the data. If so, provide the appropriate info. The program updates automatically the "data.csv" file.
+Then, the program asks if you made any servicing, and you want to update_entry the data. If so, provide the appropriate info. The program updates automatically the "data.csv" file.
 
 Then, the program checks if you have exceeded the allowed time or the allowed kilometres for every spare part of your vehicle, and informs you accordingly.
 
@@ -28,7 +28,7 @@ This file draws the data for the application from the "data.cvs" file, located w
  - The "**kmsChanged**". That is, the kilometres (or miles) of the vehicle when this spare part was changed.
  - The "**kmsInterval**". That is, the max kilometers allowed by the manufacturer, for the specific spare part.
 
-Obviously, you have to update_data_file the aforementioned information, according to your vehicle specs.
+Obviously, you have to update_entry the aforementioned information, according to your vehicle specs.
 
 
 ## Instructions (to run the Windows .exe)
