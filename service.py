@@ -12,8 +12,8 @@ import random
 import re
 
 
-# Checks the diff in comparison with today.
 def validate_date(user_date, today):
+    '''Checks diff of provided date in comparison to today.'''
     day, month, year = user_date.strip().split('/')
     date = datetime.date(int(year), int(month), int(day))
     if (today > date) and ((today - date) > datetime.timedelta(days=547)):
@@ -23,30 +23,30 @@ def validate_date(user_date, today):
     return 0
 
 
-# Validates the kms provided by the user.
 def validate_kms(kms):
+    '''Validates the kms provided by the user.'''
     m = re.search("^\d+?$", kms)
     if m is None:
         return False
     return True
 
 
-# Turns the user dates to date objects.
 def create_date_object(str_date):
+    '''Turns the user dates to date objects.'''
     day, month, year = str_date.split('/')
     date = datetime.date(int(year), int(month), int(day))
     return date
 
 
-# Creates a datetime delta object.
 def create_delta_object(date_diff):
+    '''Creates a datetime delta object.'''
     days = int(date_diff) * 30
     target_date = datetime.timedelta(days=days)
     return target_date
 
 
-# Checks the difference between dates.
 def compare_dates(date_changed, date_current, date_interval):
+    '''Checks the difference between dates.'''
     date = create_date_object(date_changed)
     interval = create_delta_object(date_interval)
     if (date_current - date) >= interval:
@@ -54,8 +54,8 @@ def compare_dates(date_changed, date_current, date_interval):
     return False
 
 
-# Checks the difference between kilometers.
 def compare_kms(kms_current, kms_changed, kms_interval):
+    '''Checks the difference between kilometers.'''
     kms_changed = int(kms_changed)
     kms_interval = int(kms_interval)
     if (kms_current - kms_changed) >= kms_interval:
@@ -63,8 +63,8 @@ def compare_kms(kms_current, kms_changed, kms_interval):
     return False
 
 
-# Updates an existing entry.
 def update_entry(choice, user_date, user_kms, spare_parts_list):
+    '''Updates an existing entry.'''
     for x in range(len(spare_parts_list)):
         if spare_parts_list[x][0] == choice:
             spare_parts_list[x][1] = str(user_date)
@@ -72,22 +72,22 @@ def update_entry(choice, user_date, user_kms, spare_parts_list):
             write_data(spare_parts_list)
 
 
-# Adds a new entry.
 def add_entry(row, spare_parts_list):
+    '''Adds a new entry.'''
     spare_parts_list.append(row)
     write_data(spare_parts_list)
 
 
-# Writes to the "data.csv" file.
 def write_data(spare_parts_list):
+    '''Writes to the "data.csv" file.'''
     with open('data.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerows(spare_parts_list)
     print('\nThe data was updated successfully. Thank you.\n')
 
 
-# Prints the messages produced by the inspection.
 def inspection_msg(messages):
+    '''Prints the messages produced by the inspection.'''
     if len(messages) == 0:
         print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
     else:
@@ -95,15 +95,15 @@ def inspection_msg(messages):
             print('\n' + messages[x])
 
 
-# Prints the various error messages.
 def error_msg(errors, errors_advanced, tries):
+    '''Prints the various error messages.'''
     if tries < len(errors):
         return errors[tries]
     return errors_advanced[random.randint(0, (len(errors_advanced) - 1))]
 
 
-# Informs the user for the currently available data entries in the "data.csv" file.
 def inform(spare_parts_list):
+    '''Informs the user for the currently available data entries in the "data.csv" file.'''
     print('\nCurrently, the available data entries are the following:\n')
     for x in range(1, len(spare_parts_list)):
         print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(
@@ -111,6 +111,7 @@ def inform(spare_parts_list):
 
 
 def main():
+    '''The main function/program.'''
     # A list with various, custom error messages.
     error_messages = ['Your input is wrong. Please try again.',
                       'Wrong again...',
@@ -142,11 +143,17 @@ def main():
     # Create the global date variable.
     today = datetime.date.today()
 
+    # Create the global mileage variable.
+    while True:
+        global_kms = input('\nPlease, provide the current mileage of the vehicle: ')
+        if validate_kms(global_kms):
+            global_kms = int(global_kms)
+
     # Create a list to hold all service messages and display them in the end.
     messages = []
 
     print('\nWhat would you like to do?\n\n'
-          'Provide the current mileage of the vehicle, to run an inspection.\n'
+          'Press "Enter", to run an inspection.\n'
           'Press "1" to update_entry an existing data entry.\n'
           'Press "2" to insert a new data entry.\n'
           'Press "3" to see the existing data entries.\n'
@@ -155,10 +162,8 @@ def main():
     while True:
         user_choice = input('\nWaiting for your choice: ')
         # Do something with the user_choice
-        if validate_kms(user_choice) and (int(user_choice) > 3):
-            user_choice = int(user_choice)
+        if user_choice == '':
             # Start the checking procedure.
-
             # Iterate the lines.
             for x in range(1, len(spare_parts_list)):
                 date_changed = spare_parts_list[x][1]
@@ -174,7 +179,7 @@ def main():
                             (spare_parts_list[x][2].lower()), spare_parts_list[x][0].lower()))
 
                 # Check how many kilometers have past since the last change.
-                if compare_kms(user_choice, kms_changed, kms_interval):
+                if compare_kms(global_kms, kms_changed, kms_interval):
                     messages.append(
                         'You have exceeded the allowed {0} kms between {1} changes. '
                         'You must change the {1} again now!'.format(
@@ -233,7 +238,6 @@ def main():
 
             # If all the above, update_entry the data.
             update_entry(spare_parts_list[int(data_update)][0], user_date, user_kms, spare_parts_list)
-            # inform(spare_parts_list)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
             element = input('Please provide the name of the spare part: ')
