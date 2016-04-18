@@ -13,7 +13,7 @@ import re
 
 
 def validate_date(user_date, today):
-    '''Checks diff of provided date in comparison to today.'''
+    """ Checks diff of provided date in comparison to today. """
     day, month, year = user_date.strip().split('/')
     date = datetime.date(int(year), int(month), int(day))
     if (today > date) and ((today - date) > datetime.timedelta(days=547)):
@@ -24,7 +24,7 @@ def validate_date(user_date, today):
 
 
 def validate_kms(kms):
-    '''Validates the kms provided by the user.'''
+    """ Validates the kms provided by the user. """
     m = re.search("^\d+?$", kms)
     if m is None:
         return False
@@ -32,21 +32,21 @@ def validate_kms(kms):
 
 
 def create_date_object(str_date):
-    '''Turns the user dates to date objects.'''
+    """  Turns the user dates to date objects. """
     day, month, year = str_date.split('/')
     date = datetime.date(int(year), int(month), int(day))
     return date
 
 
 def create_delta_object(date_diff):
-    '''Creates a datetime delta object.'''
+    """ Creates a datetime delta object. """
     days = int(date_diff) * 30
     target_date = datetime.timedelta(days=days)
     return target_date
 
 
 def compare_dates(date_changed, date_current, date_interval):
-    '''Checks the difference between dates.'''
+    """ Checks the difference between dates. """
     date = create_date_object(date_changed)
     interval = create_delta_object(date_interval)
     if (date_current - date) >= interval:
@@ -55,7 +55,7 @@ def compare_dates(date_changed, date_current, date_interval):
 
 
 def compare_kms(kms_current, kms_changed, kms_interval):
-    '''Checks the difference between kilometers.'''
+    """ Checks the difference between kilometers. """
     kms_changed = int(kms_changed)
     kms_interval = int(kms_interval)
     if (kms_current - kms_changed) >= kms_interval:
@@ -64,7 +64,7 @@ def compare_kms(kms_current, kms_changed, kms_interval):
 
 
 def update_entry(choice, user_date, user_kms, spare_parts_list):
-    '''Updates an existing entry.'''
+    """ Updates an existing entry. """
     for x in range(len(spare_parts_list)):
         if spare_parts_list[x][0] == choice:
             spare_parts_list[x][1] = str(user_date)
@@ -73,13 +73,13 @@ def update_entry(choice, user_date, user_kms, spare_parts_list):
 
 
 def add_entry(row, spare_parts_list):
-    '''Adds a new entry.'''
+    """ Adds a new entry. """
     spare_parts_list.append(row)
     write_data(spare_parts_list)
 
 
 def write_data(spare_parts_list):
-    '''Writes to the "data.csv" file.'''
+    """ Writes to the "data.csv" file. """
     with open('data.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerows(spare_parts_list)
@@ -87,7 +87,7 @@ def write_data(spare_parts_list):
 
 
 def inspection_msg(messages):
-    '''Prints the messages produced by the inspection.'''
+    """ Prints the messages produced by the inspection. """
     if messages:
         for x in range(len(messages)):
             print('\n' + messages[x])
@@ -96,14 +96,14 @@ def inspection_msg(messages):
 
 
 def error_msg(errors, errors_advanced, tries):
-    '''Prints the various error messages.'''
+    """ Prints the various error messages. """
     if tries < len(errors):
         return errors[tries]
     return errors_advanced[random.randint(0, (len(errors_advanced) - 1))]
 
 
 def inform(spare_parts_list):
-    '''Informs the user for the currently available data entries in the "data.csv" file.'''
+    """ Informs the user for the currently available data entries in the "data.csv" file. """
     print('\nCurrently, the available data entries are the following:\n')
     for x in range(1, len(spare_parts_list)):
         print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(
@@ -111,7 +111,7 @@ def inform(spare_parts_list):
 
 
 def main():
-    '''The main function/program.'''
+    """ The main function/program. """
     # A list with various, custom error messages.
     error_messages = ['Your input is wrong. Please try again.',
                       'Wrong again...',
@@ -128,17 +128,15 @@ def main():
                                'It seems that you should be starring in\n"One Flew Over the Cuckoo\'s Nest".',
                                ]
 
-    # Autobuild the sparepart list.
+    # Autobuild the spare part list.
     spare_parts_list = []
 
     # Open the file to check the data.
-    file = open('data.csv', 'r')
-
-    # Iterate the lines.
-    for line in file:
-        l = line.strip().split(',')
-        spare_parts_list.append(l)
-    file.close()
+    with open("data.csv", "r") as f:
+        # Iterate the lines.
+        for line in f:
+            l = line.strip().split(',')
+            spare_parts_list.append(l)
 
     # Create the global date variable.
     today = datetime.date.today()
@@ -234,7 +232,7 @@ def main():
             update_entry(spare_parts_list[int(data_update)][0], user_date, user_kms, spare_parts_list)
             break
         elif validate_kms(user_choice) and int(user_choice) == 2:
-            element = input('Please provide the name of the spare part: ')
+            element = input('\nPlease provide the name of the spare part: ')
             date_changed = input('Please provide the date of the last change: ')
             date_interval = input('Please provide the max number of months allowed for the spare part: ')
             kms_changed = input('Please provide the kms of the last change: ')
