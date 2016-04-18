@@ -23,9 +23,18 @@ def validate_date(user_date, today):
     return 0
 
 
-def validate_kms(kms):
-    """ Validates the kms provided by the user. """
-    m = re.search("^\d+?$", kms)
+def validate_num(n):
+    """ Validates that the argument is a number. """
+    m = re.search("^\d+?$", n)
+    m = re.search("^[A-Z|a-z]+?$", n)
+    if m is None:
+        return False
+    return True
+
+
+def validate_string(s):
+    """ Validates that the argument is a string. """
+    m = re.search("^[A-Z|a-z]+?$", s)
     if m is None:
         return False
     return True
@@ -143,7 +152,7 @@ def main():
     # Create the global mileage variable.
     while True:
         global_kms = input('\nPlease, provide the current mileage of the vehicle: ')
-        if validate_kms(global_kms):
+        if validate_num(global_kms):
             global_kms = int(global_kms)
             break
 
@@ -219,7 +228,7 @@ def main():
             while True:
                 user_kms = input('\nPlease, provide the kilometers of the ' + spare_parts_list[
                     (int(data_update))][0].lower() + ' change: ')
-                if validate_kms(user_kms):
+                if validate_num(user_kms):
                     user_kms = int(user_kms)
                     if user_kms <= global_kms:
                         break
@@ -227,15 +236,61 @@ def main():
                         print(
                             '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
 
-            # If all the above, update_entry the data.
+            # Update_entry the data.
             update_entry(spare_parts_list[int(data_update)][0], user_date, user_kms, spare_parts_list)
             break
-        elif validate_kms(user_choice) and int(user_choice) == 2:
-            element = input('\nPlease provide the name of the spare part: ')
-            date_changed = input('Please provide the date of the last change: ')
-            date_interval = input('Please provide the max number of months allowed for the spare part: ')
-            kms_changed = input('Please provide the kms of the last change: ')
-            kms_interval = input('Please provide the max kilometers allowed for the spare part: ')
+        elif validate_num(user_choice) and int(user_choice) == 2:
+            tries = 0
+            while True:
+                element = input('\nPlease provide the name of the spare part: ')
+                if validate_string(element):
+                    break
+                else:
+                    tries += 1
+                    print(error_msg(error_messages, error_messages_advanced, tries))
+
+            tries = 0
+            while True:
+                date_changed = input('Please provide the date of the last change: ')
+                if date_changed:
+                    pass
+                    break
+                else:
+                    tries += 1
+                    print(error_msg(error_messages, error_messages_advanced, tries))
+
+            tries = 0
+            while True:
+                date_interval = input('Please provide the max number of months allowed for the spare part: ')
+                if validate_num(date_interval) and int(date_interval) <= 36:
+                    break
+                else:
+                    tries += 1
+                    print(error_msg(error_messages, error_messages_advanced, tries))
+
+            tries = 0
+            while True:
+                kms_changed = input('Please provide the kms of the last change: ')
+                if validate_num(kms_changed) and int(kms_changed) < global_kms:
+                    white True:
+                        if int(kms_changed) < global_kms:
+                            break
+                        else:
+                            print('The kms you provided are more than the current kms of the vehicle.')
+                else:
+                    tries += 1
+                    print(error_msg(error_messages, error_messages_advanced, tries))
+
+            tries = 0
+            while True:
+                kms_interval = input('Please provide the max kilometers allowed for the spare part: ')
+                if validate_num(kms_interval):
+                    pass
+                    break
+                else:
+                    tries += 1
+                    print(error_msg(error_messages, error_messages_advanced, tries))
+
             row = [element, date_changed, date_interval, kms_changed, kms_interval]
             spare_parts_list.append(row)
             add_entry(spare_parts_list)

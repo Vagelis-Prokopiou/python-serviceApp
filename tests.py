@@ -1,27 +1,9 @@
-import unittest
+from unittest import TestCase
 
 
-def fun(x):
-    return x + 1
-
-
-class MyTest(unittest.TestCase):
-    def test(self):
-        self.assertEqual(fun(3), 4)
-
-        # def test_upper(self):
-        #     self.assertEqual('foo'.upper(), 'FOO')
-        #
-        # def test_isupper(self):
-        #     self.assertTrue('FOO'.isupper())
-        #     self.assertFalse('Foo'.isupper())
-        #
-        # def test_split(self):
-        #     s = 'hello world'
-        #     self.assertEqual(s.split(), ['hello', 'world'])
-        #     check that s.split fails when the separator is not a string
-        # with self.assertRaises(TypeError):
-        #     s.split(2)
+class Tests(TestCase):
+    def test_validate_num(self):
+        self.assertTrue(isinstance(1, int))
 
 
 if __name__ == '__main__':
