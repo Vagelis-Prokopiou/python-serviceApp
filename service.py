@@ -106,7 +106,7 @@ def inform(spare_parts_list):
     """ Informs the user for the currently available data entries in the "data.csv" file. """
     print('\nCurrently, the available data entries are the following:\n')
     for x in range(1, len(spare_parts_list)):
-        print('{}: Last changed on {}. It must be changed every {} months, or every {} kilometers.\n'.format(
+        print('{0}: Last changed on {1}. It must be changed every {2} months, or every {3} kilometers.\n'.format(
             spare_parts_list[x][0], spare_parts_list[x][1], spare_parts_list[x][2], spare_parts_list[x][4]))
 
 
@@ -190,7 +190,7 @@ def main():
             while True:
                 print('\n')
                 for x in range(1, (len(spare_parts_list))):
-                    print('For {}, press {}.'.format(spare_parts_list[x][0], x))
+                    print('For {0}, press {1}.'.format(spare_parts_list[x][0], x))
                 data_update = input('\nChoose the spare part: ')
 
                 if ((int(data_update)) > len(spare_parts_list)) or (int(data_update) <= 0):
