@@ -72,9 +72,8 @@ def update_entry(choice, user_date, user_kms, spare_parts_list):
             write_data(spare_parts_list)
 
 
-def add_entry(row, spare_parts_list):
+def add_entry(spare_parts_list):
     """ Adds a new entry. """
-    spare_parts_list.append(row)
     write_data(spare_parts_list)
 
 
@@ -239,7 +238,7 @@ def main():
             kms_interval = input('Please provide the max kilometers allowed for the spare part: ')
             row = [element, date_changed, date_interval, kms_changed, kms_interval]
             spare_parts_list.append(row)
-            add_entry(row, spare_parts_list)
+            add_entry(spare_parts_list)
             break
         elif validate_kms(user_choice) and int(user_choice) == 3:
             inform(spare_parts_list)
