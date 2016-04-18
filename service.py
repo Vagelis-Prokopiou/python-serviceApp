@@ -88,11 +88,11 @@ def write_data(spare_parts_list):
 
 def inspection_msg(messages):
     '''Prints the messages produced by the inspection.'''
-    if len(messages) == 0:
-        print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
-    else:
+    if messages:
         for x in range(len(messages)):
             print('\n' + messages[x])
+    else:
+        print('\nYou rock! Everything looks good!\nRun me again in a few days, will \'ya? :)')
 
 
 def error_msg(errors, errors_advanced, tries):
@@ -148,13 +148,14 @@ def main():
         global_kms = input('\nPlease, provide the current mileage of the vehicle: ')
         if validate_kms(global_kms):
             global_kms = int(global_kms)
+            break
 
     # Create a list to hold all service messages and display them in the end.
     messages = []
 
     print('\nWhat would you like to do?\n\n'
           'Press "Enter", to run an inspection.\n'
-          'Press "1" to update_entry an existing data entry.\n'
+          'Press "1" to update an existing data entry.\n'
           'Press "2" to insert a new data entry.\n'
           'Press "3" to see the existing data entries.\n'
           )
@@ -186,7 +187,7 @@ def main():
                             (spare_parts_list[x][4]).lower(), spare_parts_list[x][0].lower()))
             inspection_msg(messages)
             break
-        elif validate_kms(user_choice) and int(user_choice) == 1:
+        elif int(user_choice) == 1:
             tries = 0
             while True:
                 print('\n')
@@ -201,7 +202,7 @@ def main():
                 else:
                     break
             while True:
-                user_date = input('Please, provide the date of the ' + spare_parts_list[
+                user_date = input('\nPlease, provide the date of the ' + spare_parts_list[
                     (int(data_update))][0].lower() + ' change (e.g. 31/12/2015): ')
                 m = re.search(
                     "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
@@ -219,18 +220,11 @@ def main():
                     else:
                         break
             while True:
-                current_kms = input('\nPlease, provide the current kilometers of the vehicle: ')
-                if validate_kms(current_kms):
-                    current_kms = int(current_kms)
-                    break
-                print('\nYour choice seems wrong. Please, try again.')
-
-            while True:
                 user_kms = input('\nPlease, provide the kilometers of the ' + spare_parts_list[
                     (int(data_update))][0].lower() + ' change: ')
                 if validate_kms(user_kms):
                     user_kms = int(user_kms)
-                    if user_kms <= current_kms:
+                    if user_kms <= global_kms:
                         break
                     else:
                         print(
