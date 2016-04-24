@@ -26,7 +26,6 @@ def validate_date(user_date, today):
 def validate_num(n):
     """ Validates that the argument is a number. """
     m = re.search("^\d+?$", n)
-    m = re.search("^[A-Z|a-z]+?$", n)
     if m is None:
         return False
     return True
@@ -81,9 +80,9 @@ def update_entry(choice, user_date, user_kms, spare_parts_list):
             write_data(spare_parts_list)
 
 
-def add_entry(spare_parts_list):
-    """ Adds a new entry. """
-    write_data(spare_parts_list)
+# def add_entry(spare_parts_list):
+#     """ Adds a new entry. """
+#     write_data(spare_parts_list)
 
 
 def write_data(spare_parts_list):
@@ -114,7 +113,7 @@ def inform(spare_parts_list):
     """ Informs the user for the currently available data entries in the "data.csv" file. """
     print('\nCurrently, the available data entries are the following:\n')
     for x in range(1, len(spare_parts_list)):
-        print('{0}: Last changed on {1}. It must be changed every {2} months, or every {3} kilometers.\n'.format(
+        print('{0}: Last changed on {1}. Must be changed every {2} months, or every {3} kilometers.\n'.format(
             spare_parts_list[x][0], spare_parts_list[x][1], spare_parts_list[x][2], spare_parts_list[x][4]))
 
 
@@ -152,9 +151,11 @@ def main():
     # Create the global mileage variable.
     while True:
         global_kms = input('\nPlease, provide the current mileage of the vehicle: ')
-        if validate_num(global_kms):
+        if (global_kms != '') and validate_num(global_kms):
             global_kms = int(global_kms)
             break
+        else:
+            print('\nWrong. Try again.')
 
     # Create a list to hold all service messages and display them in the end.
     messages = []
@@ -246,18 +247,18 @@ def main():
                 if validate_string(element):
                     break
                 else:
-                    tries += 1
                     print(error_msg(error_messages, error_messages_advanced, tries))
+                    tries += 1
 
             tries = 0
             while True:
                 date_changed = input('Please provide the date of the last change: ')
-                if date_changed:
-                    pass
+                # It needs work here.
+                if (date_changed != '') and validate_date(date_changed, today):
                     break
                 else:
-                    tries += 1
                     print(error_msg(error_messages, error_messages_advanced, tries))
+                    tries += 1
 
             tries = 0
             while True:
@@ -272,7 +273,7 @@ def main():
             while True:
                 kms_changed = input('Please provide the kms of the last change: ')
                 if validate_num(kms_changed) and int(kms_changed) < global_kms:
-                    white True:
+                    while True:
                         if int(kms_changed) < global_kms:
                             break
                         else:
@@ -293,15 +294,17 @@ def main():
 
             row = [element, date_changed, date_interval, kms_changed, kms_interval]
             spare_parts_list.append(row)
-            add_entry(spare_parts_list)
+            write_data(spare_parts_list)
             break
-        elif validate_kms(user_choice) and int(user_choice) == 3:
+        elif validate_num(user_choice) and int(user_choice) == 3:
             inform(spare_parts_list)
             break
         else:
             print('\n')
             print(error_msg(error_messages, error_messages_advanced, tries))
             tries += 1
+
+        break
 
 
 if __name__ == '__main__':
