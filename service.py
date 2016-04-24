@@ -41,9 +41,12 @@ def validate_string(s):
 
 def create_date_object(str_date):
     """  Turns the user dates to date objects. """
-    day, month, year = str_date.split('/')
-    date = datetime.date(int(year), int(month), int(day))
-    return date
+    try:
+        day, month, year = str_date.split('/')
+        date = datetime.date(int(year), int(month), int(day))
+        return date
+    except:
+        return False
 
 
 def create_delta_object(date_diff):
@@ -253,8 +256,8 @@ def main():
             tries = 0
             while True:
                 date_changed = input('Please provide the date of the last change: ')
-                # It needs work here.
-                if (date_changed != '') and validate_date(date_changed, today):
+                # It needs work here. The create date object below may need to be changed with the regex above.
+                if (date_changed != '') and  create_date_object(date_changed) and validate_date(date_changed, today):
                     break
                 else:
                     print(error_msg(error_messages, error_messages_advanced, tries))
