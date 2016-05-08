@@ -1,4 +1,4 @@
-#!/usr/bin/python3.5
+#!/usr/bin/python3
 
 # This program is distributed under the GPLv2 license.
 
@@ -21,6 +21,13 @@ def validate_date(user_date, today):
     if today < date:
         return 1
     return 0
+
+def regex_validate_date(user_date):
+    """ Validate that the input provided is a date. """
+    m = re.search(
+        "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
+        user_date)
+    return m
 
 
 def validate_num(n):
@@ -154,7 +161,7 @@ def main():
     # Create the global mileage variable.
     while True:
         global_kms = input('\nPlease, provide the current mileage of the vehicle: ')
-        if (global_kms != '') and validate_num(global_kms):
+        if validate_num(global_kms):
             global_kms = int(global_kms)
             break
         else:
@@ -214,9 +221,7 @@ def main():
             while True:
                 user_date = input('\nPlease, provide the date of the ' + spare_parts_list[
                     (int(data_update))][0].lower() + ' change (e.g. 31/12/2015): ')
-                m = re.search(
-                    "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
-                    user_date)
+                m = regex_validate_date(user_date)
                 if m is None:
                     print('\nThe date you provided is not valid. Please try again.\n')
                 else:
@@ -257,7 +262,7 @@ def main():
             while True:
                 date_changed = input('Please provide the date of the last change: ')
                 # It needs work here. The create date object below may need to be changed with the regex above.
-                if (date_changed != '') and  create_date_object(date_changed) and validate_date(date_changed, today):
+                if (date_changed != '') and create_date_object(date_changed) and validate_date(date_changed, today):
                     break
                 else:
                     print(error_msg(error_messages, error_messages_advanced, tries))
@@ -308,6 +313,9 @@ def main():
             tries += 1
 
         break
+
+
+
 
 
 if __name__ == '__main__':
