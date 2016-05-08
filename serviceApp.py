@@ -161,13 +161,15 @@ def main():
     today = datetime.date.today()
 
     # Create the global mileage variable.
+    tries = 0
     while True:
         global_kms = input('\nPlease, provide the current mileage of the vehicle: ')
         if regex_validate_num(global_kms):
             global_kms = int(global_kms)
             break
         else:
-            print('\nWrong. Try again.')
+            print(error_msg(error_messages, error_messages_advanced, tries))
+            tries += 1
 
     # Create a list to hold all service messages and display them in the end.
     messages = []
@@ -181,7 +183,7 @@ def main():
     tries = 0
     while True:
         user_choice = input('\nWaiting for your choice: ')
-        # Do something with the user_choice
+        # It must be empty (Enter) or a number.
         if user_choice == '':
             # Start the checking procedure.
             # Iterate the lines.
@@ -206,7 +208,9 @@ def main():
                             (spare_parts_list[x][4]).lower(), spare_parts_list[x][0].lower()))
             inspection_msg(messages)
             break
-        elif int(user_choice) == 1:
+
+        # Update existed data.
+        elif user_choice == '1':
             tries = 0
             while True:
                 print('\n')
@@ -267,7 +271,7 @@ def main():
             break
 
         # Insert new data entry.
-        elif regex_validate_num(user_choice) and int(user_choice) == 2:
+        elif user_choice == '2':
             tries = 0
             while True:
                 # Request the spare part.
@@ -326,15 +330,15 @@ def main():
             spare_parts_list.append(row)
             write_data(spare_parts_list)
             break
-        elif regex_validate_num(user_choice) and int(user_choice) == 3:
+
+        # See existing entries.
+        elif user_choice == '3':
             inform(spare_parts_list)
             break
         else:
             print('\n')
             print(error_msg(error_messages, error_messages_advanced, tries))
             tries += 1
-
-        break
 
 
 if __name__ == '__main__':
