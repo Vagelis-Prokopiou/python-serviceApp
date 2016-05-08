@@ -32,14 +32,14 @@ Obviously, you have to update_entry the aforementioned information, according to
 
 
 ## Instructions (to run the Windows .exe)
-Open you windows terminal (Command Prompt) and change directory (cd) to the "service" folder within the root folder.
+Open you windows terminal (Command Prompt) and change directory (cd) to the "serviceApp" folder within the root folder.
 
 In there, there also is a "data.csv" file which you have to edit according to your needs.
 
 After that, you are ready to run the application. Type:
 
 ```bash
-service.exe
+serviceApp.exe
 ```
 ___
 
