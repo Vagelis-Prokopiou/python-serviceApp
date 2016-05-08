@@ -39,7 +39,7 @@ def regex_validate_num(num):
     return True
 
 
-def validate_string(s):
+def regex_validate_string(s):
     """ Validates that the argument is a string. """
     m = re.search("^[A-Z|a-z]+?$", s)
     if m is None:
@@ -210,6 +210,7 @@ def main():
             tries = 0
             while True:
                 print('\n')
+                # Provide the list with the spare parts.
                 for x in range(1, (len(spare_parts_list))):
                     print('For {0}, press {1}.'.format(spare_parts_list[x][0], x))
                 data_update = input('\nChoose the spare part: ')
@@ -222,14 +223,11 @@ def main():
                     else:
                         break
                 else:
-                    print('\n')
                     print(error_msg(error_messages, error_messages_advanced, tries))
                     tries += 1
 
             tries = 0
             while True:
-                # user_date = input('\nPlease, provide the date of the ' + spare_parts_list[
-                #     (int(data_update))][0].lower() + ' change (e.g. 31/12/2015): ')
                 user_date = input(
                     '\nPlease, provide the date of the {0} change (e.g. 31/12/2015): '.format(spare_parts_list[
                                                                                                   (int(data_update))][
@@ -248,9 +246,11 @@ def main():
                     print(error_msg(error_messages, error_messages_advanced, tries))
                     tries += 1
 
+            tries = 0
             while True:
-                user_kms = input('\nPlease, provide the kilometers of the ' + spare_parts_list[
-                    (int(data_update))][0].lower() + ' change: ')
+                user_kms = input('\nPlease, provide the kilometers of the {0} change: '.format(spare_parts_list[
+                                                                                                   (int(data_update))][
+                                                                                                   0].lower()))
                 if regex_validate_num(user_kms):
                     user_kms = int(user_kms)
                     if user_kms <= global_kms:
@@ -258,16 +258,21 @@ def main():
                     else:
                         print(
                             '\nThe kilometers you provided are more than the total kilometers of the vehicle. Something is terribly wrong...\n')
+                else:
+                    print(error_msg(error_messages, error_messages_advanced, tries))
+                    tries += 1
 
             # Update_entry the data.
             update_entry(spare_parts_list[int(data_update)][0], user_date, user_kms, spare_parts_list)
             break
+
+        # Insert new data entry.
         elif regex_validate_num(user_choice) and int(user_choice) == 2:
             tries = 0
             while True:
                 # Request the spare part.
                 element = input('\nPlease provide the name of the spare part: ')
-                if validate_string(element):
+                if regex_validate_string(element):
                     break
                 else:
                     print(error_msg(error_messages, error_messages_advanced, tries))
