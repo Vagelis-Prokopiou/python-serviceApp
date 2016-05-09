@@ -1,15 +1,7 @@
 # ServiceApp
 A Python application, to help you manage the periodic maintenance of your vehicle.
 
-## Instructions (to run the Python file)
-The main application is the "service.py" file. You just have to run it in your terminal.
-
-```bash
-python3 service.py
-```
-
-Use Python 3. If you are a Windows user, you can download Python from https://www.python.org/downloads, or use the executable (see below).
-
+## Description of the app
 When you run it, the program asks for the current mileage of your vehicle. You have to provide this value.
 
 Then, the program asks if you made any servicing, and you want to update_entry the data. If so, provide the appropriate info. The program updates automatically the "data.csv" file.
@@ -18,7 +10,7 @@ Then, the program checks if you have exceeded the allowed time or the allowed ki
 
 This file draws the data for the application from the "data.cvs" file, located within the same folder.
 
-#### The "data.cvs" file
+### The "data.cvs" file
 
  This file contains 5 columns of data (separated with commas).
 
@@ -28,19 +20,41 @@ This file draws the data for the application from the "data.cvs" file, located w
  - The "**kmsChanged**". That is, the kilometres (or miles) of the vehicle when this spare part was changed.
  - The "**kmsInterval**". That is, the max kilometers allowed by the manufacturer, for the specific spare part.
 
-Obviously, you have to update_entry the aforementioned information, according to your vehicle specs.
+Obviously, you have to update the "data.cvs" information, according to your vehicle specs.
 
+## Running the app
+The main application is the "service.py" file.
 
-## Instructions (to run the Windows .exe)
-Open you windows terminal (Command Prompt) and change directory (cd) to the "serviceApp" folder within the root folder.
+Change directory ("cd") in the root folder and run:
 
-In there, there also is a "data.csv" file which you have to edit according to your needs.
+```bash
+python3 serviceApp.py
+```
 
-After that, you are ready to run the application. Type:
+"python3" usually is a simlink to python3.4. So if "python3" doesn't work, use:
+
+```bash
+python3.4 serviceApp.py
+```
+
+If you are a Windows user, you can download Python from https://www.python.org/downloads, and run it with python (from within the root folder):
+
+```bash
+python serviceApp.py
+```
+Alternatively, you can use the Windows executable (see below).
+
+## Instructions to run the Windows serviceApp.exe
+- Open you windows terminal (Command Prompt) and change directory (cd) to the "dist/serviceApp" folder within the root folder of the app.
+
+- Update the "data.csv" file within this folder according to your needs.
+
+- You are ready to run the application. Type:
 
 ```bash
 serviceApp.exe
 ```
+
 ___
 
 Enjoy.
