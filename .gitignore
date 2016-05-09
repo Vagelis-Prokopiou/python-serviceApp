@@ -63,6 +63,3 @@ target/
 
 # IDE stuff
 .idea
-
-# The data.cvs file
-data.csv
