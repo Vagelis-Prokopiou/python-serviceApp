@@ -1,22 +1,65 @@
 <RootWidget>:
     orientation: 'vertical'
+    spacing: 5
+    # Use the following to change background color. See: https://kivy.org/docs/guide/widgets.html
+    #canvas.before:
+        #Color:
+            #rgba: 1, 1, 1, 1
+        #Rectangle:
+            ## self here refers to the widget i.e BoxLayout
+            #pos: self.pos
+            #size: self.size
+
+    # The text input region.
     BoxLayout:
-        #orientation: 'vertical'
+        background_color: [1, 0, 0, 1]
+        size_hint_y: 0.25
+        spacing: 5
+        orientation: 'vertical'
         Label:
-            text: 'Please, provide the total kms of the vehicle.'
-        TextInput:
-            #size_hint_y: None
+            text: 'Please, provide the total kms of the vehicle\nand press "Ok"'
+            font_size: 24
+            height: 70
+        BoxLayout:
+            spacing: 5
+            TextInput:
+                id: text_input
+                font_size: 20
+            Button:
+                id: ok_button
+                text: 'Ok'
+                font_size: 24
+                height: 30
+                on_release: root.alert(text_input.text)
+
+
+    # The buttons region.
     BoxLayout:
+        size_hint_y: 0.25
+        spacing: 5
+        orientation: 'vertical'
         Button:
             text: 'Run a check.'
+        BoxLayout:
+            spacing: 5
+            Button:
+                text: 'Update an existing entry.'
+            Button:
+                text: 'Insert a new entry.'
+            Button:
+                text: 'See the available entries.'
+
+    # The results region.
     BoxLayout:
-        Button:
-            text: 'Update an entry.'
-        Button:
-            text: 'Insert new entry.'
-        Button:
-            text: 'See available entries.'
-    BoxLayout:
+        size_hint_y: 0.5
+        spacing: 5
+        orientation: 'vertical'
         Label:
+            size_hint_y: 0.2
             text: 'Results'
+            font_size: 24
         TextInput:
+            id: results_text_input
+            size_hint_y: 0.8
+            font_size: 20
+
