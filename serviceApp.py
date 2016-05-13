@@ -4,7 +4,6 @@
 
 # @Author: Vagelis Prokopiou
 # @Email: drz4007@gmail.com
-# @Date: 2016-04-08 23:07:57
 
 import csv
 import datetime
@@ -90,11 +89,6 @@ def update_entry(choice, user_date, user_kms, spare_parts_list):
             spare_parts_list[x][1] = str(user_date)
             spare_parts_list[x][3] = str(user_kms)
             write_data(spare_parts_list)
-
-
-# def add_entry(spare_parts_list):
-#     """ Adds a new entry. """
-#     write_data(spare_parts_list)
 
 
 def write_data(spare_parts_list):
