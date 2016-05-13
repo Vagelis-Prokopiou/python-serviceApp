@@ -20,12 +20,15 @@ def regex_validate_num(num):
 class RootWidget(BoxLayout):
     ''' The root widget of the application. '''
 
+    global_kms = 0
+
     def alert(self, *args):
         if regex_validate_num(*args):
             # Also set the global kms variable.
-            self.ids.results_text_input.text = "Ok. You can proceed."
+            global_kms = int(args[0])
+            self.ids.results_label.text = "Ok. You can proceed.\nThe kms you provided equal to " + str(global_kms) + ' kms.'
         else:
-            self.ids.results_text_input.text = "The value you provided is wrong!"
+            self.ids.results_label.text = "The value you provided is wrong."
 
     pass
 
