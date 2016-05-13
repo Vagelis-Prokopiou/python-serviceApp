@@ -166,7 +166,8 @@ class RootWidget(BoxLayout):
             # Set the global kms variable.
             RootWidget.global_kms = int(args[0])
             if RootWidget.global_kms > 500:
-                self.ids.results_label.text = 'Ok. You can proceed.\nThe kms you provided equals to {:,} kms.'.format(RootWidget.global_kms)
+                self.ids.results_label.text = 'Ok. You can proceed.\nThe kms you provided equals to {:,} kms.'.format(
+                    RootWidget.global_kms)
                 RootWidget.proceed = True
             else:
                 self.ids.results_label.text = 'This looks brand new. Are you sure about the value you provided?'
@@ -177,6 +178,8 @@ class RootWidget(BoxLayout):
 
     def check(self):
         ''' Run this when the check button is pressed. '''
+        # Clear the messages from previous inspections.
+        RootWidget.messages = []
         # If proceed is true, run the check.
         if RootWidget.proceed:
             if RootWidget.global_kms > 500:
@@ -191,15 +194,21 @@ class RootWidget(BoxLayout):
                     # Check the time that has past since the last change.
                     if compare_dates(date_changed, RootWidget.today, date_interval):
                         RootWidget.messages.append(
-                            'You have exceeded the allowed {0} months between {1} changes. ' 'You must change the {1} again now!'.format(
+                            'Exceeded the allowed {0} months between {1} changes.'.format(
                                 date_interval.lower(), spare_part.lower()))
 
                     # Check how many kilometers have past since the last change.
                     if compare_kms(RootWidget.global_kms, kms_changed, kms_interval):
                         RootWidget.messages.append(
-                            'You have exceeded the allowed {0} kms between {1} changes. ''You must change the {1} again now!'.format(
+                            'Exceeded the allowed {0} kms between {1} changes.'.format(
                                 kms_interval.lower(), spare_part.lower()))
-                inspection_msg(RootWidget.messages)
+                # Create an empty message to use in the loop.
+                message = ''
+                for i in range(len(RootWidget.messages)):
+                    temp = RootWidget.messages[i]
+                    message += str(temp) + '\n'
+                # Print the messages by setting the label text.
+                self.ids.results_label.text = message
             else:
                 # Todo: Make the error message dynamic. Now it is getting a counter from the kv file.
                 self.ids.results_label.text = 'Are you sure that these are the total kms of the vehicle?'
@@ -207,6 +216,7 @@ class RootWidget(BoxLayout):
             # Todo: Make the error message dynamic. Now it is getting a counter from the kv file.
             self.ids.results_label.text = 'I cannot proceed. I do not inspect a valid kms value.'
 
+    # The pass below belongs to the class definition.
     pass
 
 
