@@ -49,7 +49,7 @@
             Button:
                 id: button_update
                 text: 'Update an existing entry.'
-                on_release: root.check()
+                on_release: root.update()
             Button:
                 id: button_insert
                 text: 'Insert a new entry.'
@@ -65,13 +65,20 @@
         spacing: 5
         orientation: 'vertical'
         Label:
-            size_hint_y: 0.2
+            size_hint_y: 0.3
             text: 'Results'
             font_size: 24
-        Label:
-            id: results_label
-            size_hint_y: 0.8
-            font_size: 20
-            halign: 'center'
+        BoxLayout:
+            spacing: 5
+            size_hint_y: 0.7
+            TextInput:
+                id: text_input_results
+                font_size: 20
+                size_hint_x: 0.8
+            Button:
+                id: button_done
+                text: 'Done'
+                size_hint_x: 0.2
+                on_release: root.done(text_input_results.text)
 
 
