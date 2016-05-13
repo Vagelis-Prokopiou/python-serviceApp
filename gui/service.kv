@@ -1,3 +1,5 @@
+#:set counter 0
+
 <RootWidget>:
     orientation: 'vertical'
     spacing: 5
@@ -26,11 +28,11 @@
                 id: text_input
                 font_size: 20
             Button:
-                id: ok_button
+                id: button_ok
                 text: 'Ok'
                 font_size: 24
                 height: 30
-                on_release: root.alert(text_input.text)
+                on_release: root.kms_provided(text_input.text, counter+1)
 
 
     # The buttons region.
@@ -39,15 +41,23 @@
         spacing: 5
         orientation: 'vertical'
         Button:
+            id: button_check
             text: 'Run a check.'
+            on_release: root.check()
         BoxLayout:
             spacing: 5
             Button:
+                id: button_update
                 text: 'Update an existing entry.'
+                on_release: root.check()
             Button:
+                id: button_insert
                 text: 'Insert a new entry.'
+                on_release: root.check()
             Button:
+                id: button_entries
                 text: 'See the available entries.'
+                on_release: root.check()
 
     # The results region.
     BoxLayout:
