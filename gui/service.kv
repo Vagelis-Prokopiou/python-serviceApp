@@ -6,7 +6,7 @@
 
     # The text input region.
     BoxLayout:
-        size_hint_y: 0.1
+        size_hint_y: 0.15
         background_color: [1, 0, 0, 1]
         spacing: 5
         orientation: 'vertical'
@@ -22,18 +22,18 @@
                 size_hint_x: 0.15
                 id: button_ok
                 text: 'Proceed'
-                font_size: 20
+                #font_size: 20
                 on_release: root.kms_provided(text_input.text, counter+1)
 
 
     BoxLayout:
-        size_hint_y: 0.9
+        size_hint_y: 0.7
         # The results region.
         BoxLayout:
             spacing: 5
             orientation: 'vertical'
             Label:
-                size_hint_y: 0.1
+                size_hint_y: 0.2
                 text: 'Results'
                 font_size: 24
             BoxLayout:
@@ -72,6 +72,12 @@
                 id: button_done
                 text: 'Done'
                 on_release: root.done(text_input_results.text)
+
+    BoxLayout:
+        size_hint_y: 0.15
+        Label:
+            halign: 'center'
+            text: 'Distributed under the GPLv2 licence.\nCreated by: Vagelis Prokopiou.\nBugs, suggestions, collaboration: https://github.com/Vaggos/serviceApp'
 
 
 
