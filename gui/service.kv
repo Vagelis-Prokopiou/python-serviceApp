@@ -14,18 +14,17 @@
 
     # The text input region.
     BoxLayout:
-        size_hint_y: 0.2
+        size_hint_y: 0.1
         background_color: [1, 0, 0, 1]
         spacing: 5
         orientation: 'vertical'
-        Label:
-            text: 'Please, provide the total kms of the vehicle\nand press "Proceed"'
-            font_size: 24
         BoxLayout:
             spacing: 5
             TextInput:
+                background_color: 255,255,255,1
                 id: text_input
                 font_size: 20
+                hint_text: 'Please, provide the kms of the vehicle and press "Proceed".'
             Button:
                 size_hint_x: 0.15
                 id: button_ok
@@ -35,20 +34,20 @@
 
 
     BoxLayout:
-        size_hint_y: 0.8
-
+        size_hint_y: 0.9
         # The results region.
         BoxLayout:
             spacing: 5
             orientation: 'vertical'
             Label:
-                size_hint_y: 0.15
+                size_hint_y: 0.1
                 text: 'Results'
                 font_size: 24
             BoxLayout:
                 spacing: 5
-                size_hint_y: 0.85
+                size_hint_y: 0.9
                 TextInput:
+                    background_color: 255,255,255,1
                     id: text_input_results
                     font_size: 20
                     size_hint_x: 0.8
