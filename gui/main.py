@@ -251,19 +251,25 @@ class RootWidget(BoxLayout):
             self.ids.text_input_results.text = 'I cannot proceed. I do not inspect a valid kms value.'
 
     def done(self, *args):
-        if regex_validate_num(args[0]):
-            RootWidget.chosen_spare_part = int(args[0])
-            RootWidget.continue_update(self)
-            # self.ids.text_input_results.text = 'You entered {0}'.format(args[0])
-
-        # Also check if the user has chosen a spare part first (by checking the RootWidget.chosen_spare_part)
-        elif regex_validate_date(args[0]) and RootWidget.chosen_spare_part != 0:
-            # Todo: Continue here with the user date.
-            self.ids.text_input_results.text = 'You entered {0}'.format(args[0])
+        # Todo: Add a check for the global kms variable.
+        if RootWidget.proceed:
+            if regex_validate_num(args[0]):
+                RootWidget.chosen_spare_part = int(args[0])
+                RootWidget.continue_update(self)
+                # self.ids.text_input_results.text = 'You entered {0}'.format(args[0])
+                # Also check if the user has chosen a spare part first (by checking the RootWidget.chosen_spare_part)
+            elif regex_validate_date(args[0]) and RootWidget.chosen_spare_part != 0:
+                # Todo: Continue here with the user date.
+                self.ids.text_input_results.text = 'You entered {0}'.format(args[0])
+            else:
+                self.ids.text_input_results.text = ''
+                self.ids.text_input_results.hint_text = 'The value you provided is wrong.' \
+                                                        '\nPlease, try again.'
         else:
             self.ids.text_input_results.text = ''
-            self.ids.text_input_results.hint_text = 'The value you provided is wrong.' \
-                                                    '\nPlease, try again.'
+            self.ids.text_input_results.hint_text = 'I cannot proceed. I do not inspect a valid kms value.'
+
+
 
     def continue_update(self):
         if RootWidget.chosen_spare_part + 1 > len(RootWidget.spare_parts_list) or RootWidget.chosen_spare_part <= 0:
@@ -314,18 +320,22 @@ class RootWidget(BoxLayout):
             # update_entry(RootWidget.spare_parts_list[int(data_update)][0], user_date, user_kms, RootWidget.spare_parts_list)
 
     def update(self):
-        # Provide the list with the spare parts.
-        # message = 'Delete the following, provide you value here and press "Done".\n'
-        message = ''
-        for x in range(1, (len(RootWidget.spare_parts_list))):
-            # print('For {0}, press {1}.'.format(RootWidget.spare_parts_list[x][0], x))
-            message += 'For {0}, press {1}.'.format(RootWidget.spare_parts_list[x][0], x) + '\n'
+        if  RootWidget.proceed:
+            # Provide the list with the spare parts.
+            # message = 'Delete the following, provide you value here and press "Done".\n'
+            message = ''
+            for x in range(1, (len(RootWidget.spare_parts_list))):
+                # print('For {0}, press {1}.'.format(RootWidget.spare_parts_list[x][0], x))
+                message += 'For {0}, press {1}.'.format(RootWidget.spare_parts_list[x][0], x) + '\n'
 
-        message += 'Then, press the "Done" button.'
-        # Delete the text and display the message as placeholder text (hint_text).
-        # The advantage is that the placeholder text disappears on its own.
-        self.ids.text_input_results.text = ''
-        self.ids.text_input_results.hint_text = message
+            message += 'Then, press the "Done" button.'
+            # Delete the text and display the message as placeholder text (hint_text).
+            # The advantage is that the placeholder text disappears on its own.
+            self.ids.text_input_results.text = ''
+            self.ids.text_input_results.hint_text = message
+        else:
+            self.ids.text_input_results.text = ''
+            self.ids.text_input_results.hint_text = 'I cannot proceed. I do not inspect a valid kms value.'
 
     # The pass below belongs to the class definition.
     pass
