@@ -14,71 +14,71 @@
 
     # The text input region.
     BoxLayout:
+        size_hint_y: 0.2
         background_color: [1, 0, 0, 1]
-        size_hint_y: 0.25
         spacing: 5
         orientation: 'vertical'
         Label:
-            text: 'Please, provide the total kms of the vehicle\nand press "Ok"'
+            text: 'Please, provide the total kms of the vehicle\nand press "Proceed"'
             font_size: 24
-            height: 70
         BoxLayout:
             spacing: 5
             TextInput:
                 id: text_input
                 font_size: 20
             Button:
+                size_hint_x: 0.15
                 id: button_ok
-                text: 'Ok'
-                font_size: 24
-                height: 30
+                text: 'Proceed'
+                font_size: 20
                 on_release: root.kms_provided(text_input.text, counter+1)
 
 
-    # The buttons region.
     BoxLayout:
-        size_hint_y: 0.25
-        spacing: 5
-        orientation: 'vertical'
-        Button:
-            id: button_check
-            text: 'Run a check.'
-            on_release: root.check()
+        size_hint_y: 0.8
+
+        # The results region.
         BoxLayout:
             spacing: 5
+            orientation: 'vertical'
+            Label:
+                size_hint_y: 0.15
+                text: 'Results'
+                font_size: 24
+            BoxLayout:
+                spacing: 5
+                size_hint_y: 0.85
+                TextInput:
+                    id: text_input_results
+                    font_size: 20
+                    size_hint_x: 0.8
+
+        # The right column with all the buttons.
+        BoxLayout:
+            size_hint_x: 0.15
+            spacing: 5
+            orientation: 'vertical'
+            Button:
+                id: button_check
+                text: 'Run check.'
+                on_release: root.check()
             Button:
                 id: button_update
-                text: 'Update an existing entry.'
+                text: 'Update\nexisting entry.'
                 on_release: root.update()
             Button:
                 id: button_insert
-                text: 'Insert a new entry.'
+                text: 'Insert\nnew entry.'
                 on_release: root.check()
             Button:
                 id: button_entries
-                text: 'See the available entries.'
+                text: 'See\navailable\nentries.'
                 on_release: root.check()
-
-    # The results region.
-    BoxLayout:
-        size_hint_y: 0.5
-        spacing: 5
-        orientation: 'vertical'
-        Label:
-            size_hint_y: 0.3
-            text: 'Results'
-            font_size: 24
-        BoxLayout:
-            spacing: 5
-            size_hint_y: 0.7
-            TextInput:
-                id: text_input_results
-                font_size: 20
-                size_hint_x: 0.8
             Button:
                 id: button_done
                 text: 'Done'
-                size_hint_x: 0.2
                 on_release: root.done(text_input_results.text)
+
+
 
 
