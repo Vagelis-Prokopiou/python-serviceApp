@@ -3,14 +3,6 @@
 <RootWidget>:
     orientation: 'vertical'
     spacing: 5
-    # Use the following to change background color. See: https://kivy.org/docs/guide/widgets.html
-    #canvas.before:
-        #Color:
-            #rgba: 1, 1, 1, 1
-        #Rectangle:
-            ## self here refers to the widget i.e BoxLayout
-            #pos: self.pos
-            #size: self.size
 
     # The text input region.
     BoxLayout:
@@ -25,6 +17,7 @@
                 id: text_input
                 font_size: 20
                 hint_text: 'Please, provide the kms of the vehicle and press "Proceed".'
+                hint_text_color: 0,0,0,1
             Button:
                 size_hint_x: 0.15
                 id: button_ok
@@ -51,6 +44,8 @@
                     id: text_input_results
                     font_size: 20
                     size_hint_x: 0.8
+                    hint_text: ''
+                    hint_text_color: 0,0,0,1
 
         # The right column with all the buttons.
         BoxLayout:
