@@ -139,18 +139,6 @@ def error_msg(errors, errors_advanced, tries):
     return errors_advanced[random.randint(0, (len(errors_advanced) - 1))]
 
 
-def inform(spare_parts_list):
-    """
-    Informs the user for the currently available data entries in the "data.csv" file.
-    """
-    # print('\nCurrently, the available data entries are the following:\n')
-    self.ids.text_input_results.text = 'Currently, the available data entries are the following:\n'
-
-    for x in range(1, len(spare_parts_list)):
-        print('{0}: Last changed on {1}. Must be changed every {2} months, or every {3} kilometers.\n'.format(
-            spare_parts_list[x][0], spare_parts_list[x][1], spare_parts_list[x][2], spare_parts_list[x][4]))
-
-
 class RootWidget(BoxLayout):
     '''
     The root widget of the application.
@@ -221,6 +209,17 @@ class RootWidget(BoxLayout):
             # Reference the global error_messages.
             # Todo: Make the error message dynamic. Now it is getting a counter from the kv file.
             self.ids.text_input_results.text = 'The value you provided is not valid. Try again.'
+
+    def inform(self):
+        """
+        Informs the user for the currently available data entries in the "data.csv" file.
+        """
+        self.ids.text_input_results.text = 'Currently, the available data entries are the following:\n\n'
+
+        for x in range(1, len(RootWidget.spare_parts_list)):
+            self.ids.text_input_results.text += '{0}: Last changed on {1}. Must be changed every {2} months, or every {3} kilometers.\n'.format(
+                RootWidget.spare_parts_list[x][0], RootWidget.spare_parts_list[x][1], RootWidget.spare_parts_list[x][2],
+                RootWidget.spare_parts_list[x][4])
 
     def check(self):
         '''
