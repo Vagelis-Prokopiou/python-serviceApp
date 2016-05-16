@@ -154,10 +154,13 @@ def inform(spare_parts_list):
 
 
 class RootWidget(BoxLayout):
-    ''' The root widget of the application. '''
-    # Use proceed to run your checks.
+    '''
+    The root widget of the application.
+    '''
+
+    # This will be true if the user provided a valid kms value.
+    # Use it for your first check.
     proceed = False
-    chosen_spare_part = 0
 
     # Create the global date variable.
     today = datetime.date.today()
@@ -165,7 +168,13 @@ class RootWidget(BoxLayout):
     # Autobuild the spare part list.
     spare_parts_list = []
 
-    # Create a list to hold all service messages and display them in the end.
+    # This will store the user provided spare part during "Update entry".
+    chosen_spare_part = 0
+
+    # This will store the user provided kms of a spare part change during "Update entry".
+    user_kms = 0
+
+    # Create a list to hold all messages and display them in the end during "Run check".
     messages = []
 
     # A list with various, custom error messages.
@@ -178,24 +187,25 @@ class RootWidget(BoxLayout):
                       'Are you kidding me?',
                       ]
 
+    # A list with various, custom, advanced error messages.
     error_messages_advanced = ['Arggggg!!!!!!!!!',
                                'What an @$$!!!',
                                'Are you sure that you are mentally ok man?\nMaybe you should check it out...',
                                'It seems that you should be starring in\n"One Flew Over the Cuckoo\'s Nest".',
                                ]
 
-    # Open the file to check the data.
+    # Open the file to read the data into memory.
     with open("data.csv", "r") as f:
-        # Iterate the lines.
         for line in f:
             l = line.strip().split(',')
             spare_parts_list.append(l)
 
     def kms_provided(self, *args):
-        # Check if the provided value is all numbers.
+        # Check if the provided value is a number.
         if regex_validate_num(args[0]):
             # Set the global kms variable.
             RootWidget.global_kms = int(args[0])
+            # Do not accept a value smaller than 500 kms.
             if RootWidget.global_kms > 500:
                 self.ids.text_input_results.text = 'Ok. You can proceed.\n' \
                                                    'The kms you provided equals to {:,} kms.\n' \
@@ -206,6 +216,7 @@ class RootWidget(BoxLayout):
             else:
                 self.ids.text_input_results.text = 'This looks brand new. Are you sure about the value you provided?'
         else:
+            # Error message if the value is not a number.
             # Reference the global error_messages.
             # Todo: Make the error message dynamic. Now it is getting a counter from the kv file.
             self.ids.text_input_results.text = 'The value you provided is not valid. Try again.'
@@ -251,25 +262,64 @@ class RootWidget(BoxLayout):
             self.ids.text_input_results.text = 'I cannot proceed. I do not inspect a valid kms value.'
 
     def done(self, *args):
-        # Todo: Add a check for the global kms variable.
+        # If the global Kms have been set.
         if RootWidget.proceed:
+            # If the provided value is a number.
             if regex_validate_num(args[0]):
-                RootWidget.chosen_spare_part = int(args[0])
-                RootWidget.continue_update(self)
-                # self.ids.text_input_results.text = 'You entered {0}'.format(args[0])
-                # Also check if the user has chosen a spare part first (by checking the RootWidget.chosen_spare_part)
+                # Check if it is a spare part or the kms of a change based on the value.
+                # If it is within the length of the spare part list, it is a spare part.
+                if int(args[0]) <= len(RootWidget.spare_parts_list) - 1:
+                    RootWidget.chosen_spare_part = int(args[0])
+                    RootWidget.continue_update(self)
+                # If it is bigger that 500, it is kms.
+                elif int(args[0]) > 500:
+                    RootWidget.user_kms = int(args[0])
+                    # Check if the provided value is smaller than the global kms variable.
+                    if RootWidget.user_kms <= RootWidget.global_kms:
+                        # Update the data.
+                        update_entry(spare_parts_list[int(data_update)][0], user_date, RootWidget.user_kms, RootWidget.spare_parts_list)
+                    else:
+                        self.ids.text_input_results.text = ''
+                        self.ids.text_input_results.hint_text = 'The kilometers you provided are more than the total kilometers of the vehicle.' \
+                                                                '\nThis seems wrong. I reckon that you are just stupid and you did not do it on purpose.'
+                # If none of the above, the value is wrong.
+                else:
+                    self.ids.text_input_results.text = ''
+                    self.ids.text_input_results.hint_text = 'The value you provided is wrong.' \
+                                                            '\nPlease, try again.'
+
+            # If the provided value is a date.
+            # Also check if the user has chosen a spare part first (by checking the RootWidget.chosen_spare_part)
             elif regex_validate_date(args[0]) and RootWidget.chosen_spare_part != 0:
-                # Todo: Continue here with the user date.
-                self.ids.text_input_results.text = 'You entered {0}'.format(args[0])
+                user_date = args[0]
+                # Todo: Change the date format to ISO.
+                # If the date is in the future.
+                if validate_date(user_date, RootWidget.today) == 1:
+                    self.ids.text_input_results.text = ''
+                    self.ids.text_input_results.hint_text = 'The date you provided lies ahead in the future.' \
+                                                            '\nI cannot accept that, unless you are some king of prophet,' \
+                                                            '\nor unless you own a time machine.' \
+                                                            '\nTry again.'
+                # If the date is in the distant past.
+                elif validate_date(user_date, RootWidget.today) == -1:
+                    self.ids.text_input_results.text = ''
+                    self.ids.text_input_results.hint_text = 'The date you provided seems too old.' \
+                                                            '\nI just doesn\'t make sense...' \
+                                                            '\nTry again.'
+                # If the date is right, proceed with the kms.
+                else:
+                    self.ids.text_input_results.text = ''
+                    self.ids.text_input_results.hint_text = 'Please, provide the kilometers of the {0} change:'.format(
+                        RootWidget.spare_parts_list[RootWidget.chosen_spare_part][0].lower())
+            # If the value is neither a number nor a date.
             else:
                 self.ids.text_input_results.text = ''
                 self.ids.text_input_results.hint_text = 'The value you provided is wrong.' \
                                                         '\nPlease, try again.'
+        # If there is no global kms variable set (proceed).
         else:
             self.ids.text_input_results.text = ''
             self.ids.text_input_results.hint_text = 'I cannot proceed. I do not inspect a valid kms value.'
-
-
 
     def continue_update(self):
         if RootWidget.chosen_spare_part + 1 > len(RootWidget.spare_parts_list) or RootWidget.chosen_spare_part <= 0:
@@ -320,10 +370,9 @@ class RootWidget(BoxLayout):
             # update_entry(RootWidget.spare_parts_list[int(data_update)][0], user_date, user_kms, RootWidget.spare_parts_list)
 
     def update(self):
-        if  RootWidget.proceed:
-            # Provide the list with the spare parts.
-            # message = 'Delete the following, provide you value here and press "Done".\n'
+        if RootWidget.proceed:
             message = ''
+            # Provide the list with the spare parts.
             for x in range(1, (len(RootWidget.spare_parts_list))):
                 # print('For {0}, press {1}.'.format(RootWidget.spare_parts_list[x][0], x))
                 message += 'For {0}, press {1}.'.format(RootWidget.spare_parts_list[x][0], x) + '\n'
