@@ -3,75 +3,82 @@
 <RootWidget>:
     orientation: 'vertical'
     spacing: 5
-    # Use the following to change background color. See: https://kivy.org/docs/guide/widgets.html
-    #canvas.before:
-        #Color:
-            #rgba: 1, 1, 1, 1
-        #Rectangle:
-            ## self here refers to the widget i.e BoxLayout
-            #pos: self.pos
-            #size: self.size
 
     # The text input region.
     BoxLayout:
+        size_hint_y: 0.15
         background_color: [1, 0, 0, 1]
-        size_hint_y: 0.25
         spacing: 5
         orientation: 'vertical'
-        Label:
-            text: 'Please, provide the total kms of the vehicle\nand press "Ok"'
-            font_size: 24
-            height: 70
         BoxLayout:
             spacing: 5
             TextInput:
+                background_color: 255,255,255,1
                 id: text_input
                 font_size: 20
+                hint_text: 'Please, provide the kms of the vehicle and press "Proceed".'
+                hint_text_color: 0,0,0,1
             Button:
+                size_hint_x: 0.15
                 id: button_ok
-                text: 'Ok'
-                font_size: 24
-                height: 30
+                text: 'Proceed'
+                #font_size: 20
                 on_release: root.kms_provided(text_input.text, counter+1)
 
 
-    # The buttons region.
     BoxLayout:
-        size_hint_y: 0.25
-        spacing: 5
-        orientation: 'vertical'
-        Button:
-            id: button_check
-            text: 'Run a check.'
-            on_release: root.check()
+        size_hint_y: 0.7
+        # The results region.
         BoxLayout:
             spacing: 5
+            orientation: 'vertical'
+            Label:
+                size_hint_y: 0.2
+                text: 'Results'
+                font_size: 24
+            BoxLayout:
+                spacing: 5
+                size_hint_y: 0.9
+                TextInput:
+                    background_color: 255,255,255,1
+                    id: text_input_results
+                    font_size: 20
+                    size_hint_x: 0.8
+                    hint_text: ''
+                    hint_text_color: 0,0,0,1
+
+        # The right column with all the buttons.
+        BoxLayout:
+            size_hint_x: 0.15
+            spacing: 5
+            orientation: 'vertical'
             Button:
-                id: button_update
-                text: 'Update an existing entry.'
+                id: button_check
+                text: 'Run check.'
                 on_release: root.check()
             Button:
+                id: button_update
+                text: 'Update\nexisting entry.'
+                on_release: root.update()
+            Button:
                 id: button_insert
-                text: 'Insert a new entry.'
+                text: 'Insert\nnew entry.'
                 on_release: root.check()
             Button:
                 id: button_entries
-                text: 'See the available entries.'
+                text: 'See\navailable\nentries.'
                 on_release: root.check()
+            Button:
+                id: button_done
+                text: 'Done'
+                on_release: root.done(text_input_results.text)
 
-    # The results region.
     BoxLayout:
-        size_hint_y: 0.5
-        spacing: 5
-        orientation: 'vertical'
+        size_hint_y: 0.15
         Label:
-            size_hint_y: 0.2
-            text: 'Results'
-            font_size: 24
-        Label:
-            id: results_label
-            size_hint_y: 0.8
-            font_size: 20
             halign: 'center'
+            text: 'Distributed under the GPLv2 licence.\nCreated by: Vagelis Prokopiou.\nBugs, suggestions, collaboration: https://github.com/Vaggos/serviceApp'
+
+
 
 

@@ -124,7 +124,7 @@ def inform(spare_parts_list):
 
 
 def main():
-    """ The main function/program. """
+    """ The create_dirs function/program. """
     # A list with various, custom error messages.
     error_messages = ['Your input is wrong. Please try again.',
                       'Wrong again...',
