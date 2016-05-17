@@ -63,3 +63,6 @@ target/
 
 # IDE stuff
 .idea
+
+serviceApp.spec
+service.spec
