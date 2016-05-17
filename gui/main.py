@@ -174,7 +174,7 @@ class RootWidget(BoxLayout):
                                'It seems that you should be starring in\n"One Flew Over the Cuckoo\'s Nest".',
                                ]
 
-    # Autobuild the spare part list.
+    # Create the list that will hold the available spare parts.
     spare_parts_list = []
 
     # This will store the user provided spare part during "Update entry".
@@ -195,7 +195,7 @@ class RootWidget(BoxLayout):
     # This will store the user provided kms of a spare part change during "Insert entry".
     kms_changed_insert = False
 
-    # This will store the user provided date_interval_insert value, during "Insert entry".
+    # This will store the user provided max number of months for the spare part, during "Insert entry".
     date_interval_insert = False
 
     # This will store the user provided date_interval_insert value, during "Insert entry".
@@ -205,12 +205,17 @@ class RootWidget(BoxLayout):
     with open("data.csv", "r") as f:
         for line in f:
             l = line.strip().split(',')
-            spare_parts_list.append(l)
+            # If l in not empty append it to the spare_parts_list.
+            if l != ['']:
+                print(l)
+                spare_parts_list.append(l)
 
     def kms_provided(self, *args):
-        # Check if the provided value is a number.
+        '''
+        Checks the value provided for the global_kms
+        and creates the variable if all is good.
+        '''
         if regex_validate_num(args[0]):
-            # Set the global kms variable.
             RootWidget.global_kms = int(args[0])
             # Do not accept a value smaller than 500 kms.
             if RootWidget.global_kms > 500:
@@ -283,12 +288,11 @@ class RootWidget(BoxLayout):
         Creates a new data entry.
         '''
         # Check if the global kms variable (proceed) has been set.
-        # Todo: Invert the check!!!!!!!!!!!!!!!!!!!!
-        if not RootWidget.proceed:
-            # Unset the spare_part_update, if it has been set,
-            # because we are in the process of inserting a new entry
-            # and we don't want to have problems in the "done()" function.
+        if RootWidget.proceed:
+            # Unset all the variables related to the "Update entry".
             RootWidget.spare_part_update = False
+            RootWidget.date_changed_update = False
+            RootWidget.kms_changed_update = False
             self.ids.text_input_results.text = ''
             self.ids.text_input_results.hint_text = 'Please provide the name of the spare part, and press "Done".'
         # If the global kms variable (proceed) has not been set.
@@ -300,18 +304,77 @@ class RootWidget(BoxLayout):
         Runs when the "Done" button is pressed.
         '''
         # Check if the global kms variable (proceed) has been set.
-        # Todo: Inert the check!!!!!!!!!!!!!!!!!
-        if not RootWidget.proceed:
-            # If the provided value is a number
-            # and a new_spare_part has been set,
-            # we are in the process of inserting new entry.
-            if regex_validate_num(args[0]) and RootWidget.new_spare_part:
-                pass
+        if RootWidget.proceed:
+            # If all the following are set,
+            # spare_part_insert,
+            # kms_changed_insert,
+            # date_changed_insert,
+            # kms_changed_insert,
+            # date_interval_insert,
+            # kms_interval_insert variables have been set,
+            # write the data.
+            if RootWidget.spare_part_insert \
+                    and RootWidget.date_changed_insert \
+                    and RootWidget.date_interval_insert \
+                    and RootWidget.kms_changed_insert \
+                    and RootWidget.kms_interval_insert:
+                row = [RootWidget.spare_part_insert, RootWidget.date_changed_insert, RootWidget.date_interval_insert,
+                       RootWidget.kms_changed_insert,
+                       RootWidget.kms_interval_insert]
+                RootWidget.spare_parts_list.append(row)
+                write_data(RootWidget.spare_parts_list)
+                self.ids.text_input_results.text = ''
+                self.ids.text_input_results.hint_text = 'The new entry has been successfully inserted.'
+                # Reset all the variables to start over if the button is pressed again.
+                RootWidget.spare_part_insert = False
+                RootWidget.date_changed_insert = False
+                RootWidget.kms_changed_insert = False
+                RootWidget.date_interval_insert = False
+                RootWidget.kms_interval_insert = False
 
             # If the provided value is a number
-            # and the and RootWidget.new_spare_part is False
-            # we are in the process of updating an existing entry.
-            elif regex_validate_num(args[0]) and not RootWidget.new_spare_part:
+            # and the spare_part_insert,
+            # kms_changed_insert,
+            # date_changed_insert,
+            # date_interval_insert variables have been set,
+            # this sets the kms_changed_insert variable.
+            elif regex_validate_num(args[0]) \
+                    and RootWidget.spare_part_insert \
+                    and RootWidget.date_changed_insert \
+                    and RootWidget.date_interval_insert \
+                    and RootWidget.kms_changed_insert:
+                RootWidget.kms_interval_insert = args[0]
+                # Call yourself.
+                RootWidget.done(self)
+
+            # If the provided value is a number
+            # and the spare_part_insert,
+            # kms_changed_insert,
+            # date_changed_insert,
+            # date_interval_insert variables have been set,
+            # this sets the kms_changed_insert variable.
+            elif regex_validate_num(args[0]) \
+                    and RootWidget.spare_part_insert \
+                    and RootWidget.date_changed_insert \
+                    and RootWidget.date_interval_insert:
+                RootWidget.kms_changed_insert = args[0]
+                self.ids.text_input_results.text = ''
+                self.ids.text_input_results.hint_text = 'Please provide the max kilometers allowed for the spare part:'
+
+            # If the provided value is a number
+            # and the spare_part_insert
+            # and kms_changed_insert variables have been set,
+            # this sets the date_interval_insert variable.
+            elif regex_validate_num(args[0]) \
+                    and RootWidget.spare_part_insert \
+                    and RootWidget.date_changed_insert:
+                RootWidget.date_interval_insert = args[0]
+                self.ids.text_input_results.text = ''
+                self.ids.text_input_results.hint_text = 'Please, provide the kms of the last change: '
+
+            # If the provided value is a number and nothing else is set
+            # we just started the "Update entry" process.
+            elif regex_validate_num(args[0]):
                 # Check if it is a spare part or the kms of a change based on the value.
                 # If it is within the length of the spare part list, it is a spare part.
                 if int(args[0]) <= len(RootWidget.spare_parts_list) - 1:
@@ -339,20 +402,19 @@ class RootWidget(BoxLayout):
                     self.ids.text_input_results.hint_text = 'The value you provided is wrong.' \
                                                             '\nPlease, try again.'
 
-            # If the provided value is a date.
-            # and the RootWidget.spare_part_update is False (it is reset in the insert() function)
-            # and the RootWidget.new_spare_part is not False
-            # we are in the process of inserting new entry.
-            elif regex_validate_date(args[0]) and not RootWidget.spare_part_update and RootWidget.new_spare_part:
+            # If the provided value is a date
+            # and the RootWidget.spare_part_insert is set
+            # this sets the date_changed_insert variable.
+            elif regex_validate_date(args[0]) and RootWidget.spare_part_insert:
                 # Create the date object and assign it to the date_changed_update variable.
-                RootWidget.date_changed_update = create_date_object(args[0])
+                RootWidget.date_changed_insert = create_date_object(args[0])
                 self.ids.text_input_results.text = ''
                 self.ids.text_input_results.hint_text = 'Please, provide the max number of months allowed for the spare part:'
-                here
-            # Todo: Check resets for insert and update functions.
-            # If the provided value is a date.
-            # Also check if the user has chosen a spare part first (by checking the RootWidget.spare_part_update)
-            elif regex_validate_date(args[0]) and RootWidget.spare_part_update != 0:
+
+            # If the provided value is a date
+            # and the RootWidget.spare_part_update is set
+            # this sets the date_changed_update variable.
+            elif regex_validate_date(args[0]) and RootWidget.spare_part_update:
                 RootWidget.date_changed_update = args[0]
                 # Todo: Change the date format to ISO.
                 # If the date is in the future.
@@ -377,10 +439,9 @@ class RootWidget(BoxLayout):
             # If the value is a string, it is a new spare part.
             elif regex_validate_string(args[0]):
                 # Set the new_spare_part variable.
-                RootWidget.new_spare_part = args[0]
+                RootWidget.spare_part_insert = args[0]
                 self.ids.text_input_results.text = ''
                 self.ids.text_input_results.hint_text = 'Please provide the date of the last change:'
-                pass
 
             # If the value is neither a number nor a date.
             else:
@@ -409,7 +470,9 @@ class RootWidget(BoxLayout):
             # Reset the variables used in the insert() function.
             RootWidget.spare_part_insert = False
             RootWidget.date_changed_insert = False
+            RootWidget.kms_changed_insert = False
             RootWidget.date_interval_insert = False
+            RootWidget.kms_interval_insert = False
             message = ''
             # Provide the list with the spare parts.
             for x in range(1, (len(RootWidget.spare_parts_list))):
