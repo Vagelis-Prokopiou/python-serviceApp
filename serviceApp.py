@@ -12,8 +12,10 @@ import re
 
 
 def validate_date(user_date, today):
-    """ Checks diff of provided date in comparison to today. """
-    day, month, year = user_date.strip().split('/')
+    """
+    Checks diff of provided date in comparison to today.
+    """
+    year, month, day = user_date.strip().split('-')
     date = datetime.date(int(year), int(month), int(day))
     if (today > date) and ((today - date) > datetime.timedelta(days=547)):
         return -1
@@ -23,15 +25,17 @@ def validate_date(user_date, today):
 
 
 def regex_validate_date(date):
-    """ Validate that the input provided is a date. """
-    m = re.search(
-        "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
-        date)
+    """
+    Validates that the data provided is a date.
+    """
+    m = re.search("^(\d{4})-(\d{2})-(\d{2})$", date)
     return m
 
 
 def regex_validate_num(num):
-    """ Validates that the argument is a number. """
+    """
+    Validates that the data provided is a number.
+    """
     m = re.search("^\d+?$", num)
     if m is None:
         return False
@@ -39,7 +43,9 @@ def regex_validate_num(num):
 
 
 def regex_validate_string(s):
-    """ Validates that the argument is a string. """
+    """
+    Validates that the data provided is a number.
+    """
     m = re.search("^[A-Z|a-z]+?$", s)
     if m is None:
         return False
@@ -47,9 +53,11 @@ def regex_validate_string(s):
 
 
 def create_date_object(str_date):
-    """  Turns the user dates to date objects. """
+    """
+    Turns the user dates to date objects.
+    """
     try:
-        day, month, year = str_date.split('/')
+        year, month, day = str_date.split('-')
         date = datetime.date(int(year), int(month), int(day))
         return date
     except Exception as e:
@@ -58,14 +66,18 @@ def create_date_object(str_date):
 
 
 def create_delta_object(date_diff):
-    """ Creates a datetime delta object. """
+    """
+    Creates a datetime delta object.
+    """
     days = int(date_diff) * 30
     target_date = datetime.timedelta(days=days)
     return target_date
 
 
 def compare_dates(date_changed, date_current, date_interval):
-    """ Checks the difference between dates. """
+    """
+    Checks the difference between dates.
+    """
     date = create_date_object(date_changed)
     interval = create_delta_object(date_interval)
     if (date_current - date) >= interval:
@@ -74,7 +86,9 @@ def compare_dates(date_changed, date_current, date_interval):
 
 
 def compare_kms(kms_current, kms_changed, kms_interval):
-    """ Checks the difference between kilometers. """
+    """
+    Checks the difference between kilometers.
+    """
     kms_changed = int(kms_changed)
     kms_interval = int(kms_interval)
     if (kms_current - kms_changed) >= kms_interval:
@@ -83,7 +97,9 @@ def compare_kms(kms_current, kms_changed, kms_interval):
 
 
 def update_entry(choice, user_date, user_kms, spare_parts_list):
-    """ Updates an existing entry. """
+    """
+    Updates an existing entry.
+    """
     for x in range(len(spare_parts_list)):
         if spare_parts_list[x][0] == choice:
             spare_parts_list[x][1] = str(user_date)
@@ -92,7 +108,9 @@ def update_entry(choice, user_date, user_kms, spare_parts_list):
 
 
 def write_data(spare_parts_list):
-    """ Writes to the "data.csv" file. """
+    """
+    Writes to the "data.csv" file.
+    """
     with open('data.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerows(spare_parts_list)
@@ -100,7 +118,9 @@ def write_data(spare_parts_list):
 
 
 def inspection_msg(messages):
-    """ Prints the messages produced by the inspection. """
+    """
+    Prints the messages produced by the inspection.
+    """
     if messages:
         for x in range(len(messages)):
             print('\n' + messages[x])
@@ -109,14 +129,18 @@ def inspection_msg(messages):
 
 
 def error_msg(errors, errors_advanced, tries):
-    """ Prints the various error messages. """
+    """
+    Prints the various error messages.
+    """
     if tries < len(errors):
         return errors[tries]
     return errors_advanced[random.randint(0, (len(errors_advanced) - 1))]
 
 
 def inform(spare_parts_list):
-    """ Informs the user for the currently available data entries in the "data.csv" file. """
+    """
+    Informs the user for the currently available data entries in the "data.csv" file.
+    """
     print('\nCurrently, the available data entries are the following:\n')
     for x in range(1, len(spare_parts_list)):
         print('{0}: Last changed on {1}. Must be changed every {2} months, or every {3} kilometers.\n'.format(
@@ -124,7 +148,9 @@ def inform(spare_parts_list):
 
 
 def main():
-    """ The create_dirs function/program. """
+    """
+    The main function/program.
+    """
     # A list with various, custom error messages.
     error_messages = ['Your input is wrong. Please try again.',
                       'Wrong again...',
@@ -149,7 +175,9 @@ def main():
         # Iterate the lines.
         for line in f:
             l = line.strip().split(',')
-            spare_parts_list.append(l)
+            # If l in not empty append it to the spare_parts_list.
+            if l != ['']:
+                spare_parts_list.append(l)
 
     # Create the global date variable.
     today = datetime.date.today()
@@ -227,10 +255,9 @@ def main():
             tries = 0
             while True:
                 date_changed_update = input(
-                    '\nPlease, provide the date of the {0} change (e.g. 31/12/2015): '.format(spare_parts_list[
-                                                                                                  (int(
-                                                                                                      spare_part_update))][
-                                                                                                  0].lower()))
+                    '\nPlease, provide the date of the {0} change' \
+                    '\n(in ISO 8601 format [YYYY-MM-DD]. E.g. 2016-05-01): '.format(
+                        spare_parts_list[(int(spare_part_update))][0].lower()))
                 if (date_changed_update != '') and regex_validate_date(date_changed_update):
                     # Check if the date provided is within a logical time span from today.
                     if validate_date(date_changed_update, today) == 1:
@@ -282,7 +309,8 @@ def main():
             tries = 0
             while True:
                 # Request the date of the change.
-                date_changed_insert = input('Please provide the date of the last change: ')
+                date_changed_insert = input('Please provide the date of the last change\n' \
+                                            '(in ISO 8601 format [YYYY-MM-DD]. E.g. 2016-05-01): ')
                 # It needs work here. The create date object below may need to be changed with the regex above.
                 if (date_changed_insert != '') and regex_validate_date(date_changed_insert) and create_date_object(
                         date_changed_insert) and validate_date(date_changed_insert, today):
