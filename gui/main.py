@@ -11,6 +11,9 @@ import random
 import re
 
 
+# Todo: Create a menu (About)
+
+
 def validate_date(user_date, today):
     """
     Checks diff of provided date in comparison to today.
@@ -48,7 +51,7 @@ def regex_validate_string(s):
     """
     Validates that the argument is a string.
     """
-    m = re.search("^[A-Z|a-z]+?$", s)
+    m = re.search("^[A-Z|a-z|]+?$", s)
     if m is None:
         return False
     return True
@@ -151,21 +154,6 @@ class RootWidget(BoxLayout):
     # Create the global date variable.
     today = datetime.date.today()
 
-    # Autobuild the spare part list.
-    spare_parts_list = []
-
-    # This will store the user provided spare part during "Update entry".
-    chosen_spare_part = 0
-
-    # This will store the user provided kms of a spare part change during "Update entry".
-    user_kms = 0
-
-    # This will store the user provided date of a spare part change during "Update entry".
-    user_date = 0
-
-    # This will store the user provided new spare part change during "Insert entry".
-    new_spare_part = False
-
     # Create a list to hold all messages and display them in the end during "Run check".
     messages = []
 
@@ -185,6 +173,33 @@ class RootWidget(BoxLayout):
                                'Are you sure that you are mentally ok man?\nMaybe you should check it out...',
                                'It seems that you should be starring in\n"One Flew Over the Cuckoo\'s Nest".',
                                ]
+
+    # Autobuild the spare part list.
+    spare_parts_list = []
+
+    # This will store the user provided spare part during "Update entry".
+    spare_part_update = False
+
+    # This will store the user provided last date of a spare part change, during "Update entry".
+    date_changed_update = False
+
+    # This will store the user provided kms of a spare part change during "Update entry".
+    kms_changed_update = False
+
+    # This will store the user provided new spare part (spare_part_insert), during "Insert entry".
+    spare_part_insert = False
+
+    # This will store the user provided date_interval_insert value, during "Insert entry".
+    date_changed_insert = False
+
+    # This will store the user provided kms of a spare part change during "Insert entry".
+    kms_changed_insert = False
+
+    # This will store the user provided date_interval_insert value, during "Insert entry".
+    date_interval_insert = False
+
+    # This will store the user provided date_interval_insert value, during "Insert entry".
+    kms_interval_insert = False
 
     # Open the file to read the data into memory.
     with open("data.csv", "r") as f:
@@ -212,9 +227,6 @@ class RootWidget(BoxLayout):
             # Reference the global error_messages.
             # Todo: Make the error message dynamic. Now it is getting a counter from the kv file.
             self.ids.text_input_results.text = 'The value you provided is not valid. Try again.'
-
-
-
 
     def inform(self):
         """
@@ -271,11 +283,12 @@ class RootWidget(BoxLayout):
         Creates a new data entry.
         '''
         # Check if the global kms variable (proceed) has been set.
-        if RootWidget.proceed:
-            # Unset the chosen_spare_part, if it has been set,
+        # Todo: Invert the check!!!!!!!!!!!!!!!!!!!!
+        if not RootWidget.proceed:
+            # Unset the spare_part_update, if it has been set,
             # because we are in the process of inserting a new entry
             # and we don't want to have problems in the "done()" function.
-            RootWidget.chosen_spare_part = 0
+            RootWidget.spare_part_update = False
             self.ids.text_input_results.text = ''
             self.ids.text_input_results.hint_text = 'Please provide the name of the spare part, and press "Done".'
         # If the global kms variable (proceed) has not been set.
@@ -283,8 +296,12 @@ class RootWidget(BoxLayout):
             self.ids.text_input_results.text = 'I cannot proceed. I do not inspect a valid kms value.'
 
     def done(self, *args):
+        '''
+        Runs when the "Done" button is pressed.
+        '''
         # Check if the global kms variable (proceed) has been set.
-        if RootWidget.proceed:
+        # Todo: Inert the check!!!!!!!!!!!!!!!!!
+        if not RootWidget.proceed:
             # If the provided value is a number
             # and a new_spare_part has been set,
             # we are in the process of inserting new entry.
@@ -298,16 +315,17 @@ class RootWidget(BoxLayout):
                 # Check if it is a spare part or the kms of a change based on the value.
                 # If it is within the length of the spare part list, it is a spare part.
                 if int(args[0]) <= len(RootWidget.spare_parts_list) - 1:
-                    RootWidget.chosen_spare_part = int(args[0])
+                    RootWidget.spare_part_update = int(args[0])
                     RootWidget.continue_update(self)
                 # If it is bigger that 500, it is kms.
                 elif int(args[0]) > 500:
-                    RootWidget.user_kms = int(args[0])
+                    RootWidget.kms_changed_update = int(args[0])
                     # Check if the provided value is smaller than the global kms variable.
-                    if RootWidget.user_kms <= RootWidget.global_kms:
+                    if RootWidget.kms_changed_update <= RootWidget.global_kms:
                         # Update the data.
-                        update_entry(RootWidget.spare_parts_list[RootWidget.chosen_spare_part][0], RootWidget.user_date,
-                                     RootWidget.user_kms, RootWidget.spare_parts_list)
+                        update_entry(RootWidget.spare_parts_list[RootWidget.spare_part_update][0],
+                                     RootWidget.date_changed_update,
+                                     RootWidget.kms_changed_update, RootWidget.spare_parts_list)
                         self.ids.text_input_results.text = ''
                         self.ids.text_input_results.hint_text = 'The data has been successfully updated.' \
                                                                 '\nYou can choose another action now.'
@@ -322,26 +340,30 @@ class RootWidget(BoxLayout):
                                                             '\nPlease, try again.'
 
             # If the provided value is a date.
-            # and the RootWidget.chosen_spare_part is 0
+            # and the RootWidget.spare_part_update is False (it is reset in the insert() function)
             # and the RootWidget.new_spare_part is not False
             # we are in the process of inserting new entry.
-            elif regex_validate_date(args[0]) and RootWidget.chosen_spare_part == 0 and RootWidget.new_spare_part:
-                pass
-
+            elif regex_validate_date(args[0]) and not RootWidget.spare_part_update and RootWidget.new_spare_part:
+                # Create the date object and assign it to the date_changed_update variable.
+                RootWidget.date_changed_update = create_date_object(args[0])
+                self.ids.text_input_results.text = ''
+                self.ids.text_input_results.hint_text = 'Please, provide the max number of months allowed for the spare part:'
+                here
+            # Todo: Check resets for insert and update functions.
             # If the provided value is a date.
-            # Also check if the user has chosen a spare part first (by checking the RootWidget.chosen_spare_part)
-            elif regex_validate_date(args[0]) and RootWidget.chosen_spare_part != 0:
-                RootWidget.user_date = args[0]
+            # Also check if the user has chosen a spare part first (by checking the RootWidget.spare_part_update)
+            elif regex_validate_date(args[0]) and RootWidget.spare_part_update != 0:
+                RootWidget.date_changed_update = args[0]
                 # Todo: Change the date format to ISO.
                 # If the date is in the future.
-                if validate_date(RootWidget.user_date, RootWidget.today) == 1:
+                if validate_date(RootWidget.date_changed_update, RootWidget.today) == 1:
                     self.ids.text_input_results.text = ''
                     self.ids.text_input_results.hint_text = 'The date you provided lies ahead in the future.' \
                                                             '\nI cannot accept that, unless you are some king of prophet,' \
                                                             '\nor unless you own a time machine.' \
                                                             '\nTry again.'
                 # If the date is in the distant past.
-                elif validate_date(RootWidget.user_date, RootWidget.today) == -1:
+                elif validate_date(RootWidget.date_changed_update, RootWidget.today) == -1:
                     self.ids.text_input_results.text = ''
                     self.ids.text_input_results.hint_text = 'The date you provided seems too old.' \
                                                             '\nI just doesn\'t make sense...' \
@@ -350,7 +372,7 @@ class RootWidget(BoxLayout):
                 else:
                     self.ids.text_input_results.text = ''
                     self.ids.text_input_results.hint_text = 'Please, provide the kilometers of the {0} change:'.format(
-                        RootWidget.spare_parts_list[RootWidget.chosen_spare_part][0].lower())
+                        RootWidget.spare_parts_list[RootWidget.spare_part_update][0].lower())
 
             # If the value is a string, it is a new spare part.
             elif regex_validate_string(args[0]):
@@ -359,7 +381,6 @@ class RootWidget(BoxLayout):
                 self.ids.text_input_results.text = ''
                 self.ids.text_input_results.hint_text = 'Please provide the date of the last change:'
                 pass
-
 
             # If the value is neither a number nor a date.
             else:
@@ -372,7 +393,7 @@ class RootWidget(BoxLayout):
             self.ids.text_input_results.hint_text = 'I cannot proceed. I do not inspect a valid kms value.'
 
     def continue_update(self):
-        if RootWidget.chosen_spare_part + 1 > len(RootWidget.spare_parts_list) or RootWidget.chosen_spare_part <= 0:
+        if RootWidget.spare_part_update + 1 > len(RootWidget.spare_parts_list) or RootWidget.spare_part_update <= 0:
             # print(error_msg(error_messages, error_messages_advanced, tries))
             self.ids.text_input_results.text = ''
             self.ids.text_input_results.hint_text = 'The value you provided is wrong.' \
@@ -381,10 +402,14 @@ class RootWidget(BoxLayout):
             # Continue with the function.
             self.ids.text_input_results.text = ''
             self.ids.text_input_results.hint_text = 'Please, provide the date of the {0} change (e.g. 31/12/2015): '.format(
-                RootWidget.spare_parts_list[RootWidget.chosen_spare_part][0].lower())
+                RootWidget.spare_parts_list[RootWidget.spare_part_update][0].lower())
 
     def update(self):
         if RootWidget.proceed:
+            # Reset the variables used in the insert() function.
+            RootWidget.spare_part_insert = False
+            RootWidget.date_changed_insert = False
+            RootWidget.date_interval_insert = False
             message = ''
             # Provide the list with the spare parts.
             for x in range(1, (len(RootWidget.spare_parts_list))):
@@ -404,10 +429,10 @@ class RootWidget(BoxLayout):
     pass
 
 
-class ServiceApp(App):
+class ServiceAppApp(App):
     def build(self):
         return RootWidget()
 
 
 if __name__ == '__main__':
-    ServiceApp().run()
+    ServiceAppApp().run()
