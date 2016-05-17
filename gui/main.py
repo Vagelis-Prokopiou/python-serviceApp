@@ -117,8 +117,8 @@ def write_data(spare_parts_list):
     """
     Writes to the "data.csv" file.
     """
-    with open('data.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',')
+    with open('data.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',', lineterminator='\n')
         writer.writerows(spare_parts_list)
 
 
@@ -390,8 +390,7 @@ class RootWidget(BoxLayout):
                                      RootWidget.date_changed_update,
                                      RootWidget.kms_changed_update, RootWidget.spare_parts_list)
                         self.ids.text_input_results.text = ''
-                        self.ids.text_input_results.hint_text = 'The data has been successfully updated.' \
-                                                                '\nYou can choose another action now.'
+                        self.ids.text_input_results.hint_text = 'The data has been successfully updated.'
                     else:
                         self.ids.text_input_results.text = ''
                         self.ids.text_input_results.hint_text = 'The kilometers you provided are more than the total kilometers of the vehicle.' \
