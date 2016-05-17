@@ -208,7 +208,6 @@ class RootWidget(BoxLayout):
             l = line.strip().split(',')
             # If l in not empty append it to the spare_parts_list.
             if l != ['']:
-                print(l)
                 spare_parts_list.append(l)
 
     def kms_provided(self, *args):
@@ -396,7 +395,7 @@ class RootWidget(BoxLayout):
                     else:
                         self.ids.text_input_results.text = ''
                         self.ids.text_input_results.hint_text = 'The kilometers you provided are more than the total kilometers of the vehicle.' \
-                                                                '\nThis seems wrong. I reckon that you are just stupid and you did not do it on purpose.'
+                                                                '\nThis seems wrong... Try again.'
                 # If none of the above, the value is wrong.
                 else:
                     self.ids.text_input_results.text = ''
