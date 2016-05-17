@@ -18,7 +18,7 @@ def validate_date(user_date, today):
     """
     Checks diff of provided date in comparison to today.
     """
-    day, month, year = user_date.strip().split('/')
+    year, month, day = user_date.strip().split('-')
     date = datetime.date(int(year), int(month), int(day))
     if (today > date) and ((today - date) > datetime.timedelta(days=547)):
         return -1
@@ -31,9 +31,10 @@ def regex_validate_date(date):
     """
     Validate that the input provided is a date.
     """
-    m = re.search(
-        "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
-        date)
+    # m = re.search(
+    #     "^(((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))$",
+    #     date)
+    m = re.search("^(\d{4})-(\d{2})-(\d{2})$", date)
     return m
 
 
@@ -62,7 +63,7 @@ def create_date_object(str_date):
     Turns the user date to a date objects.
     """
     try:
-        day, month, year = str_date.split('/')
+        year, month, day = str_date.split('-')
         date = datetime.date(int(year), int(month), int(day))
         return date
     except Exception as e:
@@ -441,7 +442,8 @@ class RootWidget(BoxLayout):
                 # Set the new_spare_part variable.
                 RootWidget.spare_part_insert = args[0]
                 self.ids.text_input_results.text = ''
-                self.ids.text_input_results.hint_text = 'Please provide the date of the last change:'
+                self.ids.text_input_results.hint_text = 'Please provide the date of the last change\n' \
+                                                        '(in ISO 8601 format [YYYY-MM-DD]. E.g. 2016-05-01):'
 
             # If the value is neither a number nor a date.
             else:
@@ -462,7 +464,8 @@ class RootWidget(BoxLayout):
         else:
             # Continue with the function.
             self.ids.text_input_results.text = ''
-            self.ids.text_input_results.hint_text = 'Please, provide the date of the {0} change (e.g. 31/12/2015): '.format(
+            self.ids.text_input_results.hint_text = 'Please, provide the date of the {0} change' \
+                                                    '\n(in ISO 8601 format [YYYY-MM-DD]. E.g. 2016-05-01): '.format(
                 RootWidget.spare_parts_list[RootWidget.spare_part_update][0].lower())
 
     def update(self):
