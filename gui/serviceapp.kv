@@ -1,0 +1,89 @@
+#:set counter 0
+
+<RootWidget>:
+    orientation: 'vertical'
+    spacing: 5
+
+    # The text input region.
+    BoxLayout:
+        size_hint_y: 0.15
+        background_color: [1, 0, 0, 1]
+        spacing: 5
+        orientation: 'vertical'
+        BoxLayout:
+            spacing: 5
+            TextInput:
+                background_color: 255,255,255,1
+                id: text_input
+                font_size: 20
+                hint_text: 'Please, provide the kms of the vehicle and press "Proceed".'
+                hint_text_color: 0,0,0,1
+            Button:
+                size_hint_x: 0.15
+                id: button_ok
+                text: 'Proceed'
+                #font_size: 20
+                on_release: root.kms_provided(text_input.text, counter+1)
+
+
+    BoxLayout:
+        size_hint_y: 0.7
+        # The results region.
+        BoxLayout:
+            spacing: 5
+            orientation: 'vertical'
+            Label:
+                size_hint_y: 0.2
+                text: 'Results'
+                font_size: 24
+            BoxLayout:
+                spacing: 5
+                size_hint_y: 0.9
+                TextInput:
+                    background_color: 255,255,255,1
+                    id: text_input_results
+                    font_size: 20
+                    size_hint_x: 0.8
+                    hint_text: ''
+                    hint_text_color: 0,0,0,1
+
+        # The right column with all the buttons.
+        BoxLayout:
+            size_hint_x: 0.15
+            spacing: 5
+            orientation: 'vertical'
+            Button:
+                id: button_check
+                text: 'Run check.'
+                on_release: root.check()
+            Button:
+                id: button_update
+                text: 'Update\nexisting entry.'
+                on_release: root.update()
+            Button:
+                id: button_insert
+                text: 'Insert\nnew entry.'
+                on_release: root.insert()
+            Button:
+                id: button_entries
+                text: 'See\navailable\nentries.'
+                on_release: root.inform()
+            Button:
+                id: button_done
+                text: 'Done'
+                on_release: root.done(text_input_results.text)
+
+    BoxLayout:
+        size_hint_y: 0.15
+        Label:
+            halign: 'center'
+            #color: 0,0,0,1
+            markup: True
+            text: 'Distributed under the GPLv2 licence.\nCreated by: Vagelis Prokopiou.\nBugs, suggestions, collaboration: [ref=https://github.com/Vaggos/serviceApp]https://github.com/Vaggos/serviceApp[/ref]'
+            on_ref_press:
+                import webbrowser
+                webbrowser.open('https://github.com/Vaggos/serviceApp')
+
+
+
+
