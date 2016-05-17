@@ -27,7 +27,7 @@
 
 
     BoxLayout:
-        size_hint_y: 0.7
+        size_hint_y: 0.65
         # The results region.
         BoxLayout:
             spacing: 5
@@ -74,12 +74,14 @@
                 on_release: root.done(text_input_results.text)
 
     BoxLayout:
-        size_hint_y: 0.15
+        size_hint_y: 0.2
         Label:
-            halign: 'center'
+            text: 'ServiceApp.\nA Python application,\nto help you manage\nthe periodic maintenance\nof your vehicle.'
+        Label:
+            #halign: 'center'
             #color: 0,0,0,1
             markup: True
-            text: 'Distributed under the GPLv2 licence.\nCreated by: Vagelis Prokopiou.\nBugs, suggestions, collaboration: [ref=https://github.com/Vaggos/serviceApp]https://github.com/Vaggos/serviceApp[/ref]'
+            text: 'Distributed under the GPLv2 licence.\nCreated by: Vagelis Prokopiou.\nBugs, suggestions, collaboration:\n[ref=https://github.com/Vaggos/serviceApp]https://github.com/Vaggos/serviceApp[/ref]'
             on_ref_press:
                 import webbrowser
                 webbrowser.open('https://github.com/Vaggos/serviceApp')
