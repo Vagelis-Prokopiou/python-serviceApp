@@ -19,7 +19,7 @@ The app draws the data from the "data.cvs" file, located within the same (root) 
  This file contains 5 columns of data (separated with commas).
 
  - The "**element**". That is, the name of the spare part.
- - The "**dateChanged**". The date that the spare part was last changed. If you edit this, use the day/month/year format (e.g. 31/12/2015).
+ - The "**dateChanged**". The date that the spare part was last changed. If you edit this, use the ISO 8601 format [YYYY-MM-DD] (e.g. 2016-05-18).
  - The "**dateInterval**". That is, the max time (in **months**) allowed by the manufacturer, for the specific spare part.
  - The "**kmsChanged**". That is, the kilometres (or miles) of the vehicle when this spare part was changed.
  - The "**kmsInterval**". That is, the max kilometers allowed by the manufacturer, for the specific spare part.
