@@ -28,7 +28,11 @@ var/
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
+<<<<<<< HEAD
 #*.spec
+=======
+# *.spec
+>>>>>>> 8de83d62919fbdae466eefb014f3dbc553721d39
 
 # Installer logs
 pip-log.txt
@@ -67,3 +71,4 @@ gui/.buildozer/
 gui/bin/
 service.spec
 serviceApp.spec
+
