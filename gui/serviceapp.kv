@@ -18,17 +18,19 @@
                 font_size: 20
                 hint_text: 'Please, provide the kms of the vehicle and press "Proceed".'
                 hint_text_color: 0,0,0,1
+            # The proceed button.
             Button:
-                size_hint_x: 0.15
+                # width
+                size_hint_x: 0.3
                 id: button_ok
                 text: 'Proceed'
                 #font_size: 20
                 on_release: root.kms_provided(text_input.text, counter+1)
 
 
+    # The results region.
     BoxLayout:
         size_hint_y: 0.65
-        # The results region.
         BoxLayout:
             spacing: 5
             orientation: 'vertical'
@@ -43,13 +45,15 @@
                     background_color: 255,255,255,1
                     id: text_input_results
                     font_size: 20
-                    size_hint_x: 0.8
+                    # width
+                    size_hint_x: 0.7
                     hint_text: ''
                     hint_text_color: 0,0,0,1
 
         # The right column with all the buttons.
         BoxLayout:
-            size_hint_x: 0.15
+            # width
+            size_hint_x: 0.3
             spacing: 5
             orientation: 'vertical'
             Button:
@@ -57,8 +61,9 @@
                 text: 'Run check.'
                 on_release: root.check()
             Button:
+                padding_x: 10
                 id: button_update
-                text: 'Update\nexisting entry.'
+                text: 'Update\nexisting\nentry.'
                 on_release: root.update()
             Button:
                 id: button_insert
@@ -76,12 +81,10 @@
     BoxLayout:
         size_hint_y: 0.2
         Label:
-            text: 'ServiceApp.\nA Python application,\nto help you manage\nthe periodic maintenance\nof your vehicle.'
-        Label:
-            #halign: 'center'
+            halign: 'center'
             #color: 0,0,0,1
             markup: True
-            text: 'Distributed under the GPLv2 licence.\nCreated by: Vagelis Prokopiou.\nBugs, suggestions, collaboration:\n[ref=https://github.com/Vaggos/serviceApp]https://github.com/Vaggos/serviceApp[/ref]'
+            text: 'ServiceApp.\nA Python application, to help you manage\nthe periodic maintenance of your vehicle.\nMore at: [ref=https://github.com/Vaggos/serviceApp]https://github.com/Vaggos/serviceApp[/ref]'
             on_ref_press:
                 import webbrowser
                 webbrowser.open('https://github.com/Vaggos/serviceApp')
