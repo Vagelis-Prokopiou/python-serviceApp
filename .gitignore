@@ -63,3 +63,5 @@ target/
 
 # IDE stuff
 .idea
+gui/.buildozer/
+gui/bin/
