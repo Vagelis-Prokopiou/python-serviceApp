@@ -1,4 +1,4 @@
-# ServiceApp
+# ServiceApp [![Build Status](https://travis-ci.org/Vaggos/serviceApp.svg?branch=develop)](https://travis-ci.org/Vaggos/serviceApp)
 A Python application, to help you manage the periodic maintenance of your vehicle.
 
 ## Description of the app
